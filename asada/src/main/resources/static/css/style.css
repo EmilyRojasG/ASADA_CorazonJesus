@@ -1,0 +1,100 @@
+/* ======================================================
+   ASADA Barrio Corazón de Jesús de Acosta
+   Hoja de estilos principal (personalización de Bootstrap)
+   ====================================================== */
+
+:root {
+    --asada-azul: #0d6efd;
+    --asada-azul-oscuro: #0a58ca;
+    --asada-verde: #198754;
+    --asada-fondo: #f5f7fa;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    background-color: var(--asada-fondo);
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+}
+
+main {
+    min-height: 70vh;
+}
+
+/* ---------- Marca / navbar ---------- */
+
+.navbar-brand {
+    letter-spacing: 0.3px;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img.logo-asada {
+    height: 32px;
+    width: 32px;
+    margin-right: 8px;
+}
+
+.navbar-brand i {
+    margin-right: 6px;
+}
+
+.nav-link i {
+    margin-right: 4px;
+}
+
+.navbar-usuario img {
+    height: 32px;
+    width: 32px;
+    object-fit: cover;
+}
+
+/* ---------- Footer ---------- */
+
+footer {
+    margin-top: auto;
+}
+
+/* ---------- Tarjetas ---------- */
+
+.card {
+    border: none;
+    border-radius: 12px;
+}
+
+.shadow-sm {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+}
+
+.card.card-modulo {
+    transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.card.card-modulo:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12) !important;
+}
+
+/* ---------- Login ---------- */
+
+.login-card {
+    border-radius: 16px;
+}
+
+.login-logo {
+    height: 72px;
+    width: 72px;
+}
+
+/* ---------- Utilidades ---------- */
+
+.text-asada-verde {
+    color: var(--asada-verde) !important;
+}
+
+.bg-asada-azul {
+    background-color: var(--asada-azul) !important;
+}

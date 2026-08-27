@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Lecturas | ASADA</title>
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <div th:replace="~{layout/navbar :: navbar}"></div>
+
+    <main class="flex-grow-1">
+
+        <div class="container py-4">
+
+            <div th:replace="~{layout/mensajes :: mensajes}"></div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold mb-0">
+                        <i class="bi bi-speedometer2 text-warning"></i>
+                        Lecturas registradas
+                    </h2>
+                    <a href="/lectura/nueva" class="btn btn-primary">
+                        <i class="bi bi-plus-lg"></i>
+                        Registrar lectura
+                    </a>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+
+                        <div th:if="${lecturas == null or lecturas.empty}" class="text-center text-muted py-4">
+                            Todavía no hay lecturas registradas.
+                        </div>
+
+                        <div class="table-responsive" th:if="${lecturas != null and !lecturas.empty}">
+                            <table class="table table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Abonado</th>
+                                        <th>Período</th>
+                                        <th>Fecha</th>
+                                        <th class="text-end">Lectura anterior</th>
+                                        <th class="text-end">Lectura actual</th>
+                                        <th class="text-end">Consumo (m³)</th>
+                                        <th>Registrada por</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="l : ${lecturas}">
+                                        <td>
+                                            <a th:href="@{/lectura/historial/{id}(id=${l.abonado.idAbonado})}"
+                                               th:text="${l.abonado.numeroAbonado + ' - ' + l.abonado.nombre + ' ' + l.abonado.apellidos}"></a>
+                                        </td>
+                                        <td th:text="${l.periodoMes + '/' + l.periodoAnio}"></td>
+                                        <td th:text="${#temporals.format(l.fechaLectura, 'dd/MM/yyyy')}"></td>
+                                        <td class="text-end" th:text="${#numbers.formatDecimal(l.lecturaAnterior, 1, 2)}"></td>
+                                        <td class="text-end" th:text="${#numbers.formatDecimal(l.lecturaActual, 1, 2)}"></td>
+                                        <td class="text-end fw-bold" th:text="${#numbers.formatDecimal(l.consumo, 1, 2)}"></td>
+                                        <td th:text="${l.usuario.nombre}"></td>
+                                        <td class="text-end">
+                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    data-bs-toggle="modal"
+                                                    th:data-bs-target="'#eliminarModal' + ${l.idLectura}">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+
+                                            <div class="modal fade" th:id="'eliminarModal' + ${l.idLectura}" tabindex="-1">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <form th:action="@{/lectura/eliminar}" method="post">
+                                                            <input type="hidden" name="idLectura" th:value="${l.idLectura}">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Confirmar eliminación</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                ¿Desea eliminar la lectura del período
+                                                                <strong th:text="${l.periodoMes + '/' + l.periodoAnio}"></strong>
+                                                                del abonado
+                                                                <strong th:text="${l.abonado.numeroAbonado}"></strong>?
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+        </div>
+
+    </main>
+
+    <div th:replace="~{layout/footer :: footer}"></div>
+
+    <script src="/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+
+    <script th:src="@{/js/main.js}"></script>
+
+</body>
+
+</html>

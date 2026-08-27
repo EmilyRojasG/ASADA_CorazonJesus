@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Actividades del fontanero | ASADA</title>
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <div th:replace="~{layout/navbar :: navbar}"></div>
+
+    <main class="flex-grow-1">
+
+        <div class="container py-4">
+
+            <div th:replace="~{layout/mensajes :: mensajes}"></div>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0">
+                    <i class="bi bi-tools text-primary"></i>
+                    Actividades del fontanero
+                </h2>
+                <a href="/actividad/nueva" class="btn btn-primary" sec:authorize="hasRole('FONTANERO')">
+                    <i class="bi bi-plus-lg"></i>
+                    Nueva actividad
+                </a>
+            </div>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+
+                    <div th:if="${actividades == null or actividades.empty}" class="text-center text-muted py-4">
+                        Todavía no hay actividades registradas.
+                    </div>
+
+                    <div class="table-responsive" th:if="${actividades != null and !actividades.empty}">
+                        <table class="table table-striped align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Tipo de actividad</th>
+                                    <th>Abonado</th>
+                                    <th>Descripción</th>
+                                    <th>Registrada por</th>
+                                    <th sec:authorize="hasRole('FONTANERO')"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="a : ${actividades}">
+                                    <td th:text="${#temporals.format(a.fechaActividad, 'dd/MM/yyyy')}"></td>
+                                    <td th:text="${a.tipoActividad}"></td>
+                                    <td th:text="${a.abonado != null ? (a.abonado.numeroAbonado + ' - ' + a.abonado.nombre + ' ' + a.abonado.apellidos) : 'N/A'}"></td>
+                                    <td th:text="${a.descripcion}"></td>
+                                    <td th:text="${a.usuario.nombre}"></td>
+                                    <td sec:authorize="hasRole('FONTANERO')" class="text-end">
+                                        <a th:href="@{/actividad/modificar/{id}(id=${a.idActividad})}"
+                                           class="btn btn-sm btn-outline-warning">
+                                            <i class="bi bi-pencil-fill"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                                data-bs-toggle="modal"
+                                                th:data-bs-target="'#eliminarModal' + ${a.idActividad}">
+                                            <i class="bi bi-trash-fill"></i>
+                                        </button>
+
+                                        <div class="modal fade" th:id="'eliminarModal' + ${a.idActividad}" tabindex="-1">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <form th:action="@{/actividad/eliminar}" method="post"
+                                                          th:id="'formEliminar' + ${a.idActividad}"
+                                                          onsubmit="return confirm('¿Está seguro de que desea eliminar esta actividad? Esta acción no se puede deshacer.');">
+                                                        <input type="hidden" name="idActividad" th:value="${a.idActividad}">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title">Confirmar eliminación</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <p>
+                                                                ¿Desea eliminar la actividad
+                                                                <strong th:text="${a.tipoActividad}"></strong>
+                                                                del <strong th:text="${#temporals.format(a.fechaActividad, 'dd/MM/yyyy')}"></strong>?
+                                                            </p>
+                                                            <label class="form-label">
+                                                                Motivo de la eliminación
+                                                                <span class="text-danger">*</span>
+                                                            </label>
+                                                            <textarea class="form-control" name="motivo" rows="2"
+                                                                      maxlength="500" required
+                                                                      placeholder="Explique por qué se elimina este registro"></textarea>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                            <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="mt-3" sec:authorize="hasAnyRole('ADMIN','FONTANERO')">
+                <a href="/bitacora/listado" class="text-decoration-none">
+                    <i class="bi bi-journal-text"></i>
+                    Ver bitácora de auditoría
+                </a>
+            </div>
+
+        </div>
+
+    </main>
+
+    <div th:replace="~{layout/footer :: footer}"></div>
+
+    <script src="/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+
+    <script th:src="@{/js/main.js}"></script>
+
+</body>
+
+</html>

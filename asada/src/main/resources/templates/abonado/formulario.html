@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Abonado | ASADA</title>
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <div th:replace="~{layout/navbar :: navbar}"></div>
+
+    <main class="flex-grow-1">
+
+        <div class="container py-4">
+
+            <div th:replace="~{layout/mensajes :: mensajes}"></div>
+
+                <div class="row justify-content-center">
+                    <div class="col-md-8">
+
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-primary text-white">
+                                <h4 class="mb-0">
+                                    <i class="bi bi-people-fill"></i>
+                                    <span th:text="${abonado.idAbonado != null ? 'Modificar abonado' : 'Nuevo abonado'}"></span>
+                                </h4>
+                            </div>
+                            <div class="card-body">
+
+                                <form th:action="@{/abonado/guardar}" th:object="${abonado}" method="post" enctype="multipart/form-data">
+
+                                    <input type="hidden" th:field="*{idAbonado}">
+                                    <input type="hidden" th:field="*{rutaImagen}">
+
+                                    <div class="text-center mb-4">
+                                        <img th:if="${abonado.rutaImagen != null}" th:src="@{${abonado.rutaImagen}}"
+                                             alt="Foto actual" class="rounded-circle mb-2" style="width: 90px; height: 90px; object-fit: cover;">
+                                        <i th:if="${abonado.rutaImagen == null}" class="bi bi-person-circle text-secondary" style="font-size: 5rem;"></i>
+                                        <div>
+                                            <label class="form-label small text-muted">Foto del abonado</label>
+                                            <input type="file" name="imagenFile" accept="image/*" class="form-control form-control-sm">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">N.° de abonado</label>
+                                            <input type="text" class="form-control" th:field="*{numeroAbonado}"
+                                                   th:classappend="${#fields.hasErrors('numeroAbonado') ? 'is-invalid' : ''}"
+                                                   maxlength="20" required>
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('numeroAbonado')}" th:errors="*{numeroAbonado}"></div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Categoría tarifaria</label>
+                                            <select class="form-select" name="categoriaTarifa.idCategoriaTarifa" required>
+                                                <option value="">Seleccione…</option>
+                                                <option th:each="c : ${categorias}"
+                                                        th:value="${c.idCategoriaTarifa}"
+                                                        th:selected="${abonado.categoriaTarifa != null and abonado.categoriaTarifa.idCategoriaTarifa == c.idCategoriaTarifa}"
+                                                        th:text="${c.descripcion}"></option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">N.° de medidor</label>
+                                            <input type="text" class="form-control" th:field="*{numeroMedidor}" maxlength="25">
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Nombre</label>
+                                            <input type="text" class="form-control" th:field="*{nombre}"
+                                                   th:classappend="${#fields.hasErrors('nombre') ? 'is-invalid' : ''}"
+                                                   maxlength="60" required>
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label class="form-label">Apellidos</label>
+                                            <input type="text" class="form-control" th:field="*{apellidos}"
+                                                   th:classappend="${#fields.hasErrors('apellidos') ? 'is-invalid' : ''}"
+                                                   maxlength="60" required>
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('apellidos')}" th:errors="*{apellidos}"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Cédula</label>
+                                            <input type="text" class="form-control" th:field="*{cedula}"
+                                                   th:classappend="${#fields.hasErrors('cedula') ? 'is-invalid' : ''}"
+                                                   maxlength="25" required>
+                                            <div class="invalid-feedback" th:if="${#fields.hasErrors('cedula')}" th:errors="*{cedula}"></div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Teléfono</label>
+                                            <input type="text" class="form-control" th:field="*{telefono}" maxlength="25">
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Correo</label>
+                                            <input type="email" class="form-control" th:field="*{correo}" maxlength="75">
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label class="form-label">Dirección</label>
+                                        <textarea class="form-control" th:field="*{direccion}" rows="2" maxlength="255"></textarea>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label class="form-label">Fecha de ingreso</label>
+                                            <input type="date" class="form-control" th:field="*{fechaIngreso}">
+                                        </div>
+                                        <div class="col-md-4 mb-3 d-flex align-items-end">
+                                            <div class="form-check form-switch">
+                                                <input class="form-check-input" type="checkbox" role="switch" th:field="*{activo}" id="activo">
+                                                <label class="form-check-label" for="activo">Abonado activo</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between">
+                                        <a href="/abonado/listado" class="btn btn-outline-secondary">
+                                            <i class="bi bi-arrow-left"></i>
+                                            Regresar
+                                        </a>
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="bi bi-check-lg"></i>
+                                            Guardar
+                                        </button>
+                                    </div>
+
+                                </form>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+        </div>
+
+    </main>
+
+    <div th:replace="~{layout/footer :: footer}"></div>
+
+    <script src="/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+
+    <script th:src="@{/js/main.js}"></script>
+
+</body>
+
+</html>

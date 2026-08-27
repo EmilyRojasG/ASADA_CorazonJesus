@@ -1,0 +1,19 @@
+<div th:fragment="mensajes">
+
+    <div th:if="${todoOk}"
+         class="alert alert-success alert-dismissible alert-dismissible-auto fade show"
+         role="alert">
+        <i class="bi bi-check-circle-fill"></i>
+        <span th:text="${todoOk}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+
+    <div th:if="${error}"
+         class="alert alert-danger alert-dismissible alert-dismissible-auto fade show"
+         role="alert">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+        <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
+    </div>
+
+</div>

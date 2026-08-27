@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Abonados | ASADA</title>
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <div th:replace="~{layout/navbar :: navbar}"></div>
+
+    <main class="flex-grow-1">
+
+        <div class="container py-4">
+
+            <div th:replace="~{layout/mensajes :: mensajes}"></div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold mb-0">
+                        <i class="bi bi-people-fill text-primary"></i>
+                        Abonados
+                    </h2>
+                    <a href="/abonado/nuevo" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">
+                        <i class="bi bi-plus-lg"></i>
+                        Nuevo abonado
+                    </a>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+
+                        <div th:if="${abonados == null or abonados.empty}" class="text-center text-muted py-4">
+                            Todavía no hay abonados registrados.
+                        </div>
+
+                        <div class="table-responsive" th:if="${abonados != null and !abonados.empty}">
+                            <table class="table table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>N.° abonado</th>
+                                        <th>Nombre</th>
+                                        <th>Cédula</th>
+                                        <th>Categoría</th>
+                                        <th>Medidor</th>
+                                        <th>Estado</th>
+                                        <th sec:authorize="hasRole('ADMIN')"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="a : ${abonados}">
+                                        <td>
+                                            <img th:if="${a.rutaImagen != null}" th:src="@{${a.rutaImagen}}"
+                                                 alt="Foto" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
+                                            <i th:if="${a.rutaImagen == null}" class="bi bi-person-circle fs-3 text-secondary"></i>
+                                        </td>
+                                        <td th:text="${a.numeroAbonado}"></td>
+                                        <td th:text="${a.nombre + ' ' + a.apellidos}"></td>
+                                        <td th:text="${a.cedula}"></td>
+                                        <td th:text="${a.categoriaTarifa.descripcion}"></td>
+                                        <td th:text="${a.numeroMedidor}"></td>
+                                        <td>
+                                            <span class="badge" th:classappend="${a.activo ? 'bg-success' : 'bg-secondary'}"
+                                                  th:text="${a.activo ? 'Activo' : 'Inactivo'}"></span>
+                                        </td>
+                                        <td sec:authorize="hasRole('ADMIN')" class="text-end">
+                                            <a th:href="@{/abonado/modificar/{id}(id=${a.idAbonado})}"
+                                               class="btn btn-sm btn-outline-warning">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    data-bs-toggle="modal"
+                                                    th:data-bs-target="'#eliminarModal' + ${a.idAbonado}">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+
+                                            <div class="modal fade" th:id="'eliminarModal' + ${a.idAbonado}" tabindex="-1">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <form th:action="@{/abonado/eliminar}" method="post">
+                                                            <input type="hidden" name="idAbonado" th:value="${a.idAbonado}">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Confirmar eliminación</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                ¿Desea eliminar al abonado
+                                                                <strong th:text="${a.nombre + ' ' + a.apellidos}"></strong>?
+                                                                <p class="text-muted mt-2 mb-0">
+                                                                    Si tiene lecturas asociadas, no podrá eliminarse; puede
+                                                                    desactivarlo desde el formulario de edición.
+                                                                </p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+        </div>
+
+    </main>
+
+    <div th:replace="~{layout/footer :: footer}"></div>
+
+    <script src="/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+
+    <script th:src="@{/js/main.js}"></script>
+
+</body>
+
+</html>

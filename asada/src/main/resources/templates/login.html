@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Iniciar sesión | ASADA</title>
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+
+</head>
+
+<body class="bg-light">
+
+    <main class="container">
+
+        <div class="row justify-content-center align-items-center"
+             style="min-height: 100vh;">
+
+            <div class="col-md-6 col-lg-4">
+
+                <div class="card shadow p-4 login-card">
+
+                    <div class="text-center mb-4">
+
+                        <img th:src="@{/img/logo.svg}" alt="Logo ASADA" class="login-logo">
+
+                        <h2 class="fw-bold mt-3">
+                            ASADA
+                        </h2>
+
+                        <p class="text-muted mb-0">
+                            Barrio Corazón de Jesús
+                        </p>
+
+                        <small class="text-muted">
+                            Sistema de Gestión Administrativa
+                        </small>
+
+                    </div>
+
+                    <div th:if="${param.error}"
+                         class="alert alert-danger"
+                         role="alert">
+
+                        <i class="bi bi-exclamation-triangle-fill"></i>
+
+                        Usuario o contraseña incorrectos.
+
+                    </div>
+
+                    <div th:if="${param.logout}"
+                         class="alert alert-success"
+                         role="alert">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                        Sesión cerrada correctamente.
+
+                    </div>
+
+                    <div th:if="${passwordActualizada}"
+                         class="alert alert-success"
+                         role="alert">
+
+                        <i class="bi bi-check-circle-fill"></i>
+
+                        Contraseña actualizada correctamente. Ya puede iniciar sesión.
+
+                    </div>
+
+                    <form th:action="@{/login}"
+                          method="post">
+
+                        <div class="mb-3">
+
+                            <label for="username"
+                                   class="form-label">
+                                Usuario
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    <i class="bi bi-person-fill"></i>
+                                </span>
+
+                                <input type="text"
+                                       class="form-control"
+                                       id="username"
+                                       name="username"
+                                       placeholder="Ingrese su usuario"
+                                       required>
+
+                            </div>
+
+                        </div>
+
+                        <div class="mb-4">
+
+                            <label for="password"
+                                   class="form-label">
+                                Contraseña
+                            </label>
+
+                            <div class="input-group">
+
+                                <span class="input-group-text">
+                                    <i class="bi bi-lock-fill"></i>
+                                </span>
+
+                                <input type="password"
+                                       class="form-control"
+                                       id="password"
+                                       name="password"
+                                       placeholder="Ingrese su contraseña"
+                                       required>
+
+                            </div>
+
+                        </div>
+
+                        <button type="submit"
+                                class="btn btn-primary w-100">
+
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            Iniciar sesión
+
+                        </button>
+
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <a href="/login/actualizar-password" class="small">
+                            <i class="bi bi-key-fill"></i>
+                            ¿Olvidó su contraseña? Actualícela aquí
+                        </a>
+                    </div>
+
+                </div>
+
+                <div class="text-center mt-3">
+
+                    <small class="text-muted">
+                        ASADA Barrio Corazón de Jesús de Acosta
+                    </small>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <script src="/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+
+</body>
+
+</html>

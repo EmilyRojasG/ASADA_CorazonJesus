@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Categorías tarifarias | ASADA</title>
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <div th:replace="~{layout/navbar :: navbar}"></div>
+
+    <main class="flex-grow-1">
+
+        <div class="container py-4">
+
+            <div th:replace="~{layout/mensajes :: mensajes}"></div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 class="fw-bold mb-0">
+                        <i class="bi bi-cash-coin text-success"></i>
+                        Categorías tarifarias
+                    </h2>
+                    <a href="/categoria_tarifa/nuevo" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">
+                        <i class="bi bi-plus-lg"></i>
+                        Nueva categoría
+                    </a>
+                </div>
+
+                <div class="card shadow-sm">
+                    <div class="card-body">
+
+                        <div th:if="${categorias == null or categorias.empty}" class="text-center text-muted py-4">
+                            Todavía no hay categorías tarifarias registradas.
+                        </div>
+
+                        <div class="table-responsive" th:if="${categorias != null and !categorias.empty}">
+                            <table class="table table-striped align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Descripción</th>
+                                        <th class="text-end">Tarifa base</th>
+                                        <th class="text-end">Precio por m³</th>
+                                        <th>Estado</th>
+                                        <th sec:authorize="hasRole('ADMIN')"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="c : ${categorias}">
+                                        <td th:text="${c.idCategoriaTarifa}"></td>
+                                        <td th:text="${c.descripcion}"></td>
+                                        <td class="text-end" th:text="${#numbers.formatDecimal(c.tarifaBase, 1, 2)}"></td>
+                                        <td class="text-end" th:text="${#numbers.formatDecimal(c.precioM3, 1, 2)}"></td>
+                                        <td>
+                                            <span class="badge" th:classappend="${c.activo ? 'bg-success' : 'bg-secondary'}"
+                                                  th:text="${c.activo ? 'Activa' : 'Inactiva'}"></span>
+                                        </td>
+                                        <td sec:authorize="hasRole('ADMIN')" class="text-end">
+                                            <a th:href="@{/categoria_tarifa/modificar/{id}(id=${c.idCategoriaTarifa})}"
+                                               class="btn btn-sm btn-outline-warning">
+                                                <i class="bi bi-pencil-fill"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    data-bs-toggle="modal"
+                                                    th:data-bs-target="'#eliminarModal' + ${c.idCategoriaTarifa}">
+                                                <i class="bi bi-trash-fill"></i>
+                                            </button>
+
+                                            <div class="modal fade" th:id="'eliminarModal' + ${c.idCategoriaTarifa}" tabindex="-1">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <form th:action="@{/categoria_tarifa/eliminar}" method="post">
+                                                            <input type="hidden" name="idCategoriaTarifa" th:value="${c.idCategoriaTarifa}">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Confirmar eliminación</h5>
+                                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                ¿Desea eliminar la categoría <strong th:text="${c.descripcion}"></strong>?
+                                                                <p class="text-muted mt-2 mb-0">
+                                                                    Si tiene abonados asociados, no podrá eliminarse; puede desactivarla
+                                                                    desde el formulario de edición.
+                                                                </p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                                <button type="submit" class="btn btn-danger">Eliminar</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+        </div>
+
+    </main>
+
+    <div th:replace="~{layout/footer :: footer}"></div>
+
+    <script src="/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+
+    <script th:src="@{/js/main.js}"></script>
+
+</body>
+
+</html>

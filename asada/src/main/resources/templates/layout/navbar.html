@@ -1,0 +1,105 @@
+<nav th:fragment="navbar"
+     xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+     class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm">
+
+    <div class="container-fluid">
+
+        <a class="navbar-brand fw-bold" href="/">
+            <img th:src="@{/img/logo.svg}" alt="Logo ASADA" class="logo-asada">
+            ASADA Barrio Corazón de Jesús
+        </a>
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarPrincipal"
+                aria-controls="navbarPrincipal"
+                aria-expanded="false"
+                aria-label="Mostrar navegación">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarPrincipal">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/">
+                        <i class="bi bi-house-fill"></i>
+                        Inicio
+                    </a>
+                </li>
+
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" href="/dashboard">
+                        <i class="bi bi-speedometer"></i>
+                        Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','SECRETARIA')">
+                    <a class="nav-link" href="/abonado/listado">
+                        <i class="bi bi-people-fill"></i>
+                        Abonados
+                    </a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','SECRETARIA')">
+                    <a class="nav-link" href="/categoria_tarifa/listado">
+                        <i class="bi bi-cash-coin"></i>
+                        Tarifas
+                    </a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','SECRETARIA')">
+                    <a class="nav-link" href="/lectura/listado">
+                        <i class="bi bi-speedometer2"></i>
+                        Lecturas
+                    </a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link" href="/usuario/listado">
+                        <i class="bi bi-person-badge-fill"></i>
+                        Usuarios
+                    </a>
+                </li>
+
+                <li class="nav-item" sec:authorize="hasAnyRole('ADMIN','FONTANERO')">
+                    <a class="nav-link" href="/actividad/listado">
+                        <i class="bi bi-tools"></i>
+                        Actividades
+                    </a>
+                </li>
+
+            </ul>
+
+            <ul class="navbar-nav" sec:authorize="!isAuthenticated()">
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">
+                        <i class="bi bi-box-arrow-in-right"></i>
+                        Iniciar sesión
+                    </a>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav navbar-usuario align-items-lg-center" sec:authorize="isAuthenticated()">
+                <li class="nav-item">
+                    <a class="nav-link" href="/perfil">
+                        <i class="bi bi-person-circle"></i>
+                        <span sec:authentication="name"></span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-link nav-link border-0">
+                            <i class="bi bi-box-arrow-right"></i>
+                            Cerrar sesión
+                        </button>
+                    </form>
+                </li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
