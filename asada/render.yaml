@@ -10,6 +10,7 @@ services:
   - type: web
     name: asada-corazon-jesus
     runtime: docker
+    rootDir: asada
     dockerfilePath: ./Dockerfile
     plan: free
     region: oregon
