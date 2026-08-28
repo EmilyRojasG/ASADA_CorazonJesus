@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Reportes | ASADA</title>
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@500;600;700&amp;display=swap">
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <div th:replace="~{layout/navbar :: navbar}"></div>
+
+    <main class="flex-grow-1">
+
+        <div class="container py-4">
+
+            <div th:replace="~{layout/mensajes :: mensajes}"></div>
+
+            <h2 class="fw-bold mb-4">
+                <i class="bi bi-bar-chart-fill text-info"></i>
+                Reportes de consumo
+            </h2>
+
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <form th:action="@{/reportes}" method="get" class="row g-3 align-items-end">
+
+                        <div class="col-md-3">
+                            <label class="form-label">Año</label>
+                            <input type="number" class="form-control" name="anio"
+                                   th:value="${anioSeleccionado}" min="2000" max="2100" required>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Mes (opcional)</label>
+                            <select class="form-select" name="mes">
+                                <option value="">Todos</option>
+                                <option value="1" th:selected="${mesSeleccionado == 1}">Enero</option>
+                                <option value="2" th:selected="${mesSeleccionado == 2}">Febrero</option>
+                                <option value="3" th:selected="${mesSeleccionado == 3}">Marzo</option>
+                                <option value="4" th:selected="${mesSeleccionado == 4}">Abril</option>
+                                <option value="5" th:selected="${mesSeleccionado == 5}">Mayo</option>
+                                <option value="6" th:selected="${mesSeleccionado == 6}">Junio</option>
+                                <option value="7" th:selected="${mesSeleccionado == 7}">Julio</option>
+                                <option value="8" th:selected="${mesSeleccionado == 8}">Agosto</option>
+                                <option value="9" th:selected="${mesSeleccionado == 9}">Septiembre</option>
+                                <option value="10" th:selected="${mesSeleccionado == 10}">Octubre</option>
+                                <option value="11" th:selected="${mesSeleccionado == 11}">Noviembre</option>
+                                <option value="12" th:selected="${mesSeleccionado == 12}">Diciembre</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label">Abonado (opcional)</label>
+                            <select class="form-select" name="idAbonado">
+                                <option value="">Todos los abonados</option>
+                                <option th:each="ab : ${abonados}"
+                                        th:value="${ab.idAbonado}"
+                                        th:selected="${idAbonadoSeleccionado != null and idAbonadoSeleccionado == ab.idAbonado}"
+                                        th:text="${ab.numeroAbonado + ' - ' + ab.nombre + ' ' + ab.apellidos}"></option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                <i class="bi bi-search"></i>
+                                Generar
+                            </button>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <div th:if="${seBusco}">
+
+                <div th:if="${lecturas == null or lecturas.empty}" class="alert alert-info">
+                    No se encontraron lecturas para los filtros seleccionados.
+                </div>
+
+                <div th:if="${lecturas != null and !lecturas.empty}">
+
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-4">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-list-check text-primary" style="font-size: 2rem;"></i>
+                                    <h3 class="mt-2 mb-0" th:text="${resumen.totalLecturas()}">0</h3>
+                                    <p class="text-muted mb-0">Lecturas encontradas</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card shadow-sm h-100">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-droplet-fill text-info" style="font-size: 2rem;"></i>
+                                    <h3 class="mt-2 mb-0" th:text="${#numbers.formatDecimal(resumen.consumoTotal(), 1, 2) + ' m³'}">0</h3>
+                                    <p class="text-muted mb-0">Consumo total</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card shadow-sm h-100 bg-success text-white">
+                                <div class="card-body text-center">
+                                    <i class="bi bi-cash-stack" style="font-size: 2rem;"></i>
+                                    <h3 class="mt-2 mb-0" th:text="${'₡' + #numbers.formatDecimal(resumen.montoEstimadoTotal(), 1, 2)}">₡0</h3>
+                                    <p class="mb-0">Monto estimado a facturar</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">Detalle de lecturas</h5>
+                        <a th:href="@{/reportes/exportar.csv(anio=${anioSeleccionado},mes=${mesSeleccionado},idAbonado=${idAbonadoSeleccionado})}"
+                           class="btn btn-outline-success btn-sm">
+                            <i class="bi bi-filetype-csv"></i>
+                            Exportar CSV
+                        </a>
+                    </div>
+
+                    <div class="card shadow-sm mb-4">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Abonado</th>
+                                            <th>Período</th>
+                                            <th>Fecha</th>
+                                            <th class="text-end">Consumo (m³)</th>
+                                            <th class="text-end">Monto estimado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="l : ${lecturas}">
+                                            <td th:text="${l.abonado.numeroAbonado + ' - ' + l.abonado.nombre + ' ' + l.abonado.apellidos}"></td>
+                                            <td th:text="${l.periodoMes + '/' + l.periodoAnio}"></td>
+                                            <td th:text="${#temporals.format(l.fechaLectura, 'dd/MM/yyyy')}"></td>
+                                            <td class="text-end" th:text="${#numbers.formatDecimal(l.consumo, 1, 2)}"></td>
+                                            <td class="text-end" th:text="${'₡' + #numbers.formatDecimal(reporteService.calcularMontoEstimado(l), 1, 2)}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h5 class="fw-bold mb-3">Consumo mensual del año <span th:text="${anioSeleccionado}"></span></h5>
+
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-sm align-middle mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th th:each="entrada : ${consumoPorMes}" th:text="${entrada.key}"></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td th:each="entrada : ${consumoPorMes}"
+                                                th:text="${#numbers.formatDecimal(entrada.value, 1, 2)}"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <div th:replace="~{layout/footer :: footer}"></div>
+
+    <script src="/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+
+    <script th:src="@{/js/main.js}"></script>
+
+</body>
+
+</html>

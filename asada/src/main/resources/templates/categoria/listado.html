@@ -18,6 +18,11 @@
     <link rel="stylesheet"
           href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@500;600;700&amp;display=swap">
+
     <link rel="stylesheet"
           th:href="@{/css/style.css}">
 
@@ -40,7 +45,7 @@
                         <i class="bi bi-cash-coin text-success"></i>
                         Categorías tarifarias
                     </h2>
-                    <a href="/categoria_tarifa/nuevo" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">
+                    <a href="/categoria_tarifa/nuevo" class="btn btn-primary" sec:authorize="hasRole('AGREGAR')">
                         <i class="bi bi-plus-lg"></i>
                         Nueva categoría
                     </a>
@@ -62,7 +67,7 @@
                                         <th class="text-end">Tarifa base</th>
                                         <th class="text-end">Precio por m³</th>
                                         <th>Estado</th>
-                                        <th sec:authorize="hasRole('ADMIN')"></th>
+                                        <th sec:authorize="hasAnyRole('EDITAR','ELIMINAR')"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -75,12 +80,12 @@
                                             <span class="badge" th:classappend="${c.activo ? 'bg-success' : 'bg-secondary'}"
                                                   th:text="${c.activo ? 'Activa' : 'Inactiva'}"></span>
                                         </td>
-                                        <td sec:authorize="hasRole('ADMIN')" class="text-end">
+                                        <td sec:authorize="hasAnyRole('EDITAR','ELIMINAR')" class="text-end">
                                             <a th:href="@{/categoria_tarifa/modificar/{id}(id=${c.idCategoriaTarifa})}"
-                                               class="btn btn-sm btn-outline-warning">
+                                               class="btn btn-sm btn-outline-warning" sec:authorize="hasRole('EDITAR')">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
-                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                            <button type="button" class="btn btn-sm btn-outline-danger" sec:authorize="hasRole('ELIMINAR')"
                                                     data-bs-toggle="modal"
                                                     th:data-bs-target="'#eliminarModal' + ${c.idCategoriaTarifa}">
                                                 <i class="bi bi-trash-fill"></i>

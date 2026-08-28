@@ -1,6 +1,7 @@
 package com.asada.controller;
 
 import com.asada.domain.Abonado;
+import com.asada.security.PermisoUtil;
 import com.asada.service.AbonadoService;
 import com.asada.service.CategoriaTarifaService;
 import jakarta.validation.Valid;
@@ -71,6 +72,8 @@ public class AbonadoController {
             model.addAttribute("categorias", categoriaTarifaService.getCategorias(true));
             return "abonado/formulario";
         }
+
+        PermisoUtil.requiereRol(abonado.getIdAbonado() == null ? "AGREGAR" : "EDITAR");
 
         try {
             abonadoService.save(abonado, imagenFile);

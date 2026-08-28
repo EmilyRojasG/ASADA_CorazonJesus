@@ -113,6 +113,7 @@ CREATE TABLE abonado (
   apellidos VARCHAR(60) NOT NULL,
   cedula VARCHAR(25) NOT NULL UNIQUE,
   direccion VARCHAR(255),
+  numero_finca VARCHAR(25),
   telefono VARCHAR(25),
   correo VARCHAR(75),
   numero_medidor VARCHAR(25),
@@ -175,4 +176,24 @@ CREATE TABLE bitacora_actividad (
   PRIMARY KEY (id_bitacora),
   CHECK (accion IN ('REGISTRO', 'EDICION', 'ELIMINACION')),
   FOREIGN KEY fk_bitacora_usuario (id_usuario) REFERENCES usuario(id_usuario)
+) ENGINE = InnoDB;
+
+-- Cartas de disponibilidad de agua, para futuros nuevos abonados que
+-- necesitan demostrar que la ASADA puede brindarles el servicio (por
+-- ejemplo, para trámites de permisos de construcción). No requieren que
+-- la persona ya sea abonado.
+CREATE TABLE carta_disponibilidad (
+  id_carta INT NOT NULL AUTO_INCREMENT,
+  numero_carta VARCHAR(30) NOT NULL UNIQUE,
+  id_usuario INT NOT NULL,
+  nombre_solicitante VARCHAR(120) NOT NULL,
+  cedula_solicitante VARCHAR(25) NOT NULL,
+  direccion_propiedad VARCHAR(255) NOT NULL,
+  numero_finca VARCHAR(25) NULL,
+  plano_catastrado VARCHAR(60) NULL,
+  fecha_emision DATE NOT NULL,
+  observaciones VARCHAR(500) NULL,
+  fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_carta),
+  FOREIGN KEY fk_carta_usuario (id_usuario) REFERENCES usuario(id_usuario)
 ) ENGINE = InnoDB;

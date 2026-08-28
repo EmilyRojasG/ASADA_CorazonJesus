@@ -53,16 +53,29 @@ como referencia de arquitectura, seguridad y buenas prácticas.
 
 ### ✅ Módulo adicional — Actividades del fontanero y bitácora de auditoría
 
-- Nuevo rol **FONTANERO** y usuario de prueba `fontanero`.
-- **Actividades**: solo el rol FONTANERO puede registrar, editar o
-  eliminar actividades (tipo de actividad, descripción, fecha, abonado
-  relacionado opcional). ADMIN puede consultarlas (solo lectura).
+- Permiso especial **FONTANERO** y usuario de prueba `fontanero`.
+- **Actividades**: solo quien tenga el permiso FONTANERO puede registrar,
+  editar o eliminar actividades (tipo de actividad, descripción, fecha,
+  abonado relacionado opcional). Cualquier usuario con permiso VER puede
+  consultarlas (solo lectura).
 - Editar o eliminar una actividad exige un **motivo obligatorio** (campo
   de texto requerido) y una confirmación explícita antes de ejecutarse.
-- **Bitácora de auditoría** (`/bitacora/listado`, visible para ADMIN y
+- **Bitácora de auditoría** (`/bitacora/listado`, visible para VER y
   FONTANERO): registra automáticamente cada alta, edición o eliminación
   ("fontanero ha registrado una actividad", "... ha editado ...", "... ha
   eliminado ..."), junto con el motivo cuando aplica.
+
+### ✅ Cartas de disponibilidad de agua
+
+- Genera constancias formales de disponibilidad de agua para futuros
+  nuevos abonados (por ejemplo, para trámites de permisos de
+  construcción), sin necesidad de que la persona ya esté registrada como
+  abonado.
+- Numeración automática y correlativa por año (`CD-2026-0001`, etc.).
+- Vista imprimible con membrete, listo para "Imprimir / Guardar como PDF"
+  desde el navegador (no requiere librerías adicionales de generación de
+  PDF).
+- Historial de todas las cartas emitidas.
 
 ### ✅ Perfil de usuario y actualización de contraseña
 
@@ -115,11 +128,11 @@ como referencia de arquitectura, seguridad y buenas prácticas.
 
 ## Usuarios de prueba
 
-| Usuario | Contraseña       | Rol(es)             |
-|------------|------------------|----------------------|
-| `admin`     | `Admin.2026`     | ADMIN, SECRETARIA    |
-| `imora`     | `Imora.2026`     | ADMIN, SECRETARIA    |
-| `fontanero` | `Fontanero.2026` | FONTANERO            |
+| Usuario | Contraseña       | Permisos             |
+|------------|------------------|------------------------|
+| `admin`     | `Admin.2026`     | VER, AGREGAR, EDITAR, ELIMINAR |
+| `imora`     | `Imora.2026`     | VER, AGREGAR, EDITAR, ELIMINAR |
+| `fontanero` | `Fontanero.2026` | VER, FONTANERO         |
 
 > Estas contraseñas son solo para desarrollo/pruebas locales. Cámbialas
 > (o crea usuarios nuevos desde el módulo de Usuarios) antes de usar el
@@ -170,31 +183,65 @@ src/main/resources/
 └── templates/         # Vistas Thymeleaf (layout, páginas, errores)
 ```
 
-## Módulos y rutas principales
+## Módulos y permisos
 
-| Módulo | Rutas | Rol requerido |
+El sistema usa **permisos por acción**, no roles por puesto de trabajo:
+`VER`, `AGREGAR`, `EDITAR`, `ELIMINAR` (cualquier usuario puede tener
+cualquier combinación de estos 4). El único permiso "especial" es
+`FONTANERO`, exclusivo para administrar el módulo de Actividades.
+
+| Módulo | Rutas | Permiso requerido |
 |---|---|---|
-| Dashboard | `GET /dashboard` | Cualquier usuario autenticado |
-| Usuarios | `/usuario/**` | ADMIN |
-| Categorías tarifarias | `/categoria_tarifa/nuevo`, `/guardar`, `/modificar/**`, `/eliminar/**` | ADMIN |
-| Categorías tarifarias | `/categoria_tarifa/listado` | SECRETARIA |
-| Abonados | `/abonado/nuevo`, `/guardar`, `/modificar/**`, `/eliminar/**` | ADMIN |
-| Abonados | `/abonado/listado` | SECRETARIA |
-| Lecturas | `/lectura/**` | SECRETARIA |
+| Dashboard, Mi perfil, Reportes | `/dashboard`, `/perfil/**`, `/reportes/**` | Cualquier usuario autenticado |
+| Abonados / Categorías / Usuarios | `.../nuevo`, `.../guardar` (creación) | AGREGAR |
+| Abonados / Categorías / Usuarios | `.../modificar/**`, `.../guardar` (edición) | EDITAR |
+| Abonados / Categorías / Usuarios | `.../eliminar/**` | ELIMINAR |
+| Abonados / Categorías / Usuarios / Lecturas | `.../listado` | VER |
+| Lecturas | `/lectura/nueva`, `/lectura/guardar` | AGREGAR |
+| Lecturas | `/lectura/eliminar` | ELIMINAR |
 | Actividades del fontanero | `/actividad/nueva`, `/guardar`, `/modificar/**`, `/eliminar/**` | FONTANERO |
-| Actividades del fontanero | `/actividad/listado` | ADMIN, FONTANERO |
-| Bitácora de auditoría | `/bitacora/listado` | ADMIN, FONTANERO |
-| Mi perfil | `/perfil`, `/perfil/cambiar-password` | Cualquier usuario autenticado |
-| Actualizar contraseña | `/login/actualizar-password` | Público (verifica contraseña actual) |
+| Actividades del fontanero, Bitácora | `/actividad/listado`, `/bitacora/listado` | VER o FONTANERO |
+| Cartas de disponibilidad | `/carta_disponibilidad/nueva`, `/guardar` | AGREGAR |
+| Cartas de disponibilidad | `/carta_disponibilidad/listado`, `/ver/**` | VER |
 
-> El usuario `imora` (ver datos de prueba) tiene ambos roles (ADMIN y
-> SECRETARIA), por lo que puede usar el sistema completo. El usuario
-> `admin` ahora también tiene ambos roles (se agregó SECRETARIA para que
-> pueda ver los listados). Si prefieres que ADMIN no vea esas pantallas,
-> quita esa asignación en `usuario_rol`.
+> Datos de prueba: `admin` e `imora` tienen los 4 permisos generales
+> (VER/AGREGAR/EDITAR/ELIMINAR). `fontanero` tiene VER (para ver todo lo
+> demás de solo lectura) + FONTANERO (para administrar únicamente el
+> módulo de actividades).
+
+## Despliegue en Render
+
+El proyecto ya está preparado para desplegarse en Render como servicio
+Docker:
+
+1. **Puerto:** `server.port` lee la variable de entorno `PORT` que Render
+   asigna automáticamente (con `8080` como valor por defecto local).
+2. **Base de datos:** no se debe editar `application.properties` para
+   producción. Basta con definir estas variables de entorno en el panel
+   de Render (Spring Boot las toma automáticamente):
+   - `SPRING_DATASOURCE_URL`
+   - `SPRING_DATASOURCE_USERNAME`
+   - `SPRING_DATASOURCE_PASSWORD`
+   - `SPRING_PROFILES_ACTIVE=render` (activa `application-render.properties`,
+     con caché de plantillas activada y menos ruido en los logs)
+3. **Dockerfile:** compila el proyecto con Maven en una etapa y copia solo
+   el `.jar` final a una imagen liviana con el JRE.
+4. **`render.yaml`:** Blueprint opcional para crear el servicio con
+   "New +" → "Blueprint" en Render, apuntando a este repositorio.
+
+> ⚠️ **Almacenamiento de imágenes:** el sistema de archivos de un servicio
+> web en Render es efímero — las imágenes subidas a `uploads/` se pierden
+> en cada reinicio o despliegue nuevo, hasta que se migre a Firebase
+> Storage (pendiente) o se agregue un "Persistent Disk" en Render.
+>
+> La conexión real a la base de datos en **Aiven** y a **Firebase
+> Storage** se configurará en un paso posterior; por ahora el proyecto
+> solo quedó *listo* para recibir esas credenciales por variables de
+> entorno, sin tenerlas conectadas todavía.
 
 ## Próximos pasos (hoja de ruta)
 
-1. **Entrega 3** – Reportes (PDF/Excel), migración de imágenes a Firebase
-   Storage, despliegue en Render con variables de entorno y ajustes finales
-   de seguridad.
+1. Conectar la base de datos de producción en **Aiven**.
+2. Migrar el almacenamiento de imágenes a **Firebase Storage**.
+3. Exportación de reportes a PDF/Excel nativo (hoy exportan a CSV).
+4. Ajustes finales de seguridad.

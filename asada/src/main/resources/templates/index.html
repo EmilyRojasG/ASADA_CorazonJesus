@@ -17,6 +17,11 @@
     <link rel="stylesheet"
           href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@500;600;700&amp;display=swap">
+
     <link rel="stylesheet"
           th:href="@{/css/style.css}">
 
@@ -30,121 +35,97 @@
 
     <main class="flex-grow-1">
 
+        <!-- Hero -->
+        <div class="bg-gradient-asada text-white">
+            <div class="container py-5">
+                <div class="row align-items-center py-4">
+                    <div class="col-lg-8 text-center text-lg-start">
+                        <span class="badge bg-white text-primary mb-3 px-3 py-2">
+                            <i class="bi bi-droplet-fill"></i>
+                            Agua potable para nuestra comunidad
+                        </span>
+                        <h1 class="fw-bold display-6 mb-3">
+                            ASADA Barrio Corazón de Jesús
+                        </h1>
+                        <p class="lead mb-0" style="opacity: 0.92;">
+                            Sistema de gestión administrativa del acueducto: abonados, tarifas,
+                            lecturas de medidor, reportes y mantenimiento, en un solo lugar.
+                        </p>
+                    </div>
+                    <div class="col-lg-4 d-none d-lg-flex justify-content-center">
+                        <i class="bi bi-droplet-fill" style="font-size: 9rem; opacity: 0.18;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="container py-5">
 
             <div class="text-center mb-5">
-
-                <div class="mb-3">
-                    <i class="bi bi-droplet-fill text-primary"
-                       style="font-size: 4rem;"></i>
-                </div>
-
-                <h1 class="fw-bold">
-                    ASADA Barrio Corazón de Jesús
-                </h1>
-
-                <p class="lead text-muted">
-                    Sistema de Gestión Administrativa
-                </p>
-
+                <h2 class="fw-bold">¿Qué necesitas hacer hoy?</h2>
+                <p class="text-muted">Accede directamente al módulo que necesitas.</p>
             </div>
 
             <div class="row g-4">
 
-                <div class="col-md-6 col-lg-3">
-
-                    <div class="card shadow-sm h-100 text-center p-4">
-
-                        <i class="bi bi-people-fill text-primary"
-                           style="font-size: 2.5rem;"></i>
-
-                        <h5 class="mt-3">
-                            Abonados
-                        </h5>
-
-                        <p class="text-muted">
-                            Gestión de los abonados del acueducto.
-                        </p>
-
-                        <a href="/abonado/listado"
-                           class="btn btn-primary mt-auto">
-                            Ver abonados
-                        </a>
-
-                    </div>
-
+                <div class="col-md-6 col-lg-4">
+                    <a href="/abonado/listado" class="text-decoration-none text-reset">
+                        <div class="card card-modulo shadow-sm h-100 text-center p-4">
+                            <i class="bi bi-people-fill text-primary"></i>
+                            <h5 class="mt-3">Abonados</h5>
+                            <p class="text-muted mb-0">Gestión de los abonados del acueducto.</p>
+                        </div>
+                    </a>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
-
-                    <div class="card shadow-sm h-100 text-center p-4">
-
-                        <i class="bi bi-cash-coin text-success"
-                           style="font-size: 2.5rem;"></i>
-
-                        <h5 class="mt-3">
-                            Tarifas
-                        </h5>
-
-                        <p class="text-muted">
-                            Administración de las categorías tarifarias.
-                        </p>
-
-                        <a href="/categoria_tarifa/listado"
-                           class="btn btn-success mt-auto">
-                            Ver tarifas
-                        </a>
-
-                    </div>
-
+                <div class="col-md-6 col-lg-4">
+                    <a href="/categoria_tarifa/listado" class="text-decoration-none text-reset">
+                        <div class="card card-modulo shadow-sm h-100 text-center p-4">
+                            <i class="bi bi-cash-coin text-success"></i>
+                            <h5 class="mt-3">Tarifas</h5>
+                            <p class="text-muted mb-0">Administración de las categorías tarifarias.</p>
+                        </div>
+                    </a>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
-
-                    <div class="card shadow-sm h-100 text-center p-4">
-
-                        <i class="bi bi-speedometer2 text-info"
-                           style="font-size: 2.5rem;"></i>
-
-                        <h5 class="mt-3">
-                            Lecturas
-                        </h5>
-
-                        <p class="text-muted">
-                            Registro y consulta del consumo de agua.
-                        </p>
-
-                        <a href="/lectura/listado"
-                           class="btn btn-info mt-auto">
-                            Ver lecturas
-                        </a>
-
-                    </div>
-
+                <div class="col-md-6 col-lg-4">
+                    <a href="/lectura/listado" class="text-decoration-none text-reset">
+                        <div class="card card-modulo shadow-sm h-100 text-center p-4">
+                            <i class="bi bi-speedometer2 text-info"></i>
+                            <h5 class="mt-3">Lecturas</h5>
+                            <p class="text-muted mb-0">Registro y consulta del consumo de agua.</p>
+                        </div>
+                    </a>
                 </div>
 
-                <div class="col-md-6 col-lg-3">
+                <div class="col-md-6 col-lg-4">
+                    <a href="/reportes" class="text-decoration-none text-reset">
+                        <div class="card card-modulo shadow-sm h-100 text-center p-4">
+                            <i class="bi bi-bar-chart-fill text-warning"></i>
+                            <h5 class="mt-3">Reportes</h5>
+                            <p class="text-muted mb-0">Consultas y reportes administrativos.</p>
+                        </div>
+                    </a>
+                </div>
 
-                    <div class="card shadow-sm h-100 text-center p-4">
+                <div class="col-md-6 col-lg-4">
+                    <a href="/actividad/listado" class="text-decoration-none text-reset">
+                        <div class="card card-modulo shadow-sm h-100 text-center p-4">
+                            <i class="bi bi-tools text-danger"></i>
+                            <h5 class="mt-3">Actividades</h5>
+                            <p class="text-muted mb-0">Reparaciones y mantenimiento del fontanero.</p>
+                        </div>
+                    </a>
+                </div>
 
-                        <i class="bi bi-bar-chart-fill text-warning"
-                           style="font-size: 2.5rem;"></i>
-
-                        <h5 class="mt-3">
-                            Reportes
-                        </h5>
-
-                        <p class="text-muted">
-                            Consultas y reportes administrativos.
-                        </p>
-
-                        <a href="/reportes"
-                           class="btn btn-warning mt-auto">
-                            Ver reportes
-                        </a>
-
-                    </div>
-
+                <div class="col-md-6 col-lg-4">
+                    <a href="/login" class="text-decoration-none text-reset">
+                        <div class="card card-modulo shadow-sm h-100 text-center p-4">
+                            <i class="bi bi-box-arrow-in-right text-secondary"></i>
+                            <h5 class="mt-3">Iniciar sesión</h5>
+                            <p class="text-muted mb-0">Accede con tu usuario y contraseña.</p>
+                        </div>
+                    </a>
                 </div>
 
             </div>

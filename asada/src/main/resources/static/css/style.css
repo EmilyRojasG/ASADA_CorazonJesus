@@ -5,10 +5,25 @@
 
 :root {
     --asada-azul: #0d6efd;
-    --asada-azul-oscuro: #0a58ca;
+    --asada-azul-oscuro: #0a4fb8;
+    --asada-teal: #0d9488;
+    --asada-teal-oscuro: #0b7a70;
     --asada-verde: #198754;
-    --asada-fondo: #f5f7fa;
+    --asada-ambar: #f59e0b;
+    --asada-rojo: #dc3545;
+    --asada-tinta: #10243e;
+    --asada-fondo: #f3f6fa;
+    --asada-fondo-alterno: #eef2f7;
+    --asada-borde: #e3e9f0;
+    --asada-radio: 14px;
+    --asada-radio-sm: 10px;
+    --asada-sombra: 0 6px 18px rgba(16, 36, 62, 0.08);
+    --asada-sombra-hover: 0 14px 30px rgba(16, 36, 62, 0.14);
+    --asada-gradiente: linear-gradient(135deg, var(--asada-azul) 0%, var(--asada-teal) 100%);
+    --asada-gradiente-suave: linear-gradient(135deg, rgba(13, 110, 253, 0.08) 0%, rgba(13, 148, 136, 0.08) 100%);
 }
+
+/* ---------- Base ---------- */
 
 html,
 body {
@@ -17,25 +32,74 @@ body {
 
 body {
     background-color: var(--asada-fondo);
-    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    background-image:
+        radial-gradient(circle at 10% 0%, rgba(13, 110, 253, 0.05), transparent 40%),
+        radial-gradient(circle at 90% 100%, rgba(13, 148, 136, 0.06), transparent 45%);
+    background-attachment: fixed;
+    font-family: "Inter", "Segoe UI", Arial, Helvetica, sans-serif;
+    color: var(--asada-tinta);
+}
+
+h1, h2, h3, h4, h5, h6,
+.navbar-brand,
+.card-header {
+    font-family: "Poppins", "Segoe UI", Arial, Helvetica, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
 }
 
 main {
     min-height: 70vh;
 }
 
+a {
+    color: var(--asada-azul-oscuro);
+}
+
+::selection {
+    background: rgba(13, 110, 253, 0.18);
+}
+
 /* ---------- Marca / navbar ---------- */
 
+.navbar {
+    background: var(--asada-gradiente) !important;
+    box-shadow: 0 4px 18px rgba(10, 79, 184, 0.25);
+}
+
+.navbar .nav-link,
+.navbar .navbar-brand {
+    color: rgba(255, 255, 255, 0.95) !important;
+}
+
+.navbar .nav-link {
+    border-radius: 999px;
+    padding-left: 0.9rem !important;
+    padding-right: 0.9rem !important;
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    background-color: rgba(255, 255, 255, 0.14);
+    color: #ffffff !important;
+}
+
 .navbar-brand {
-    letter-spacing: 0.3px;
+    letter-spacing: 0.2px;
     display: flex;
     align-items: center;
+    font-size: 1.15rem;
 }
 
 .navbar-brand img.logo-asada {
-    height: 32px;
-    width: 32px;
-    margin-right: 8px;
+    height: 34px;
+    width: 34px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background: #ffffff;
+    padding: 3px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .navbar-brand i {
@@ -43,50 +107,232 @@ main {
 }
 
 .nav-link i {
-    margin-right: 4px;
+    margin-right: 5px;
 }
 
 .navbar-usuario img {
     height: 32px;
     width: 32px;
     object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+.navbar-toggler {
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.navbar-toggler-icon {
+    filter: brightness(0) invert(1);
 }
 
 /* ---------- Footer ---------- */
 
 footer {
     margin-top: auto;
+    background-color: #ffffff;
+    border-top: 1px solid var(--asada-borde);
 }
 
 /* ---------- Tarjetas ---------- */
 
 .card {
-    border: none;
-    border-radius: 12px;
+    border: 1px solid var(--asada-borde);
+    border-radius: var(--asada-radio);
 }
 
 .shadow-sm {
-    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    box-shadow: var(--asada-sombra) !important;
+}
+
+.card-header {
+    border-top-left-radius: var(--asada-radio) !important;
+    border-top-right-radius: var(--asada-radio) !important;
+    border-bottom: none;
+}
+
+.card-header.bg-primary {
+    background: var(--asada-gradiente) !important;
 }
 
 .card.card-modulo {
-    transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+    overflow: hidden;
+    position: relative;
+}
+
+.card.card-modulo::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--asada-gradiente-suave);
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
 }
 
 .card.card-modulo:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.12) !important;
+    transform: translateY(-6px);
+    box-shadow: var(--asada-sombra-hover) !important;
+    border-color: rgba(13, 110, 253, 0.25);
+}
+
+.card.card-modulo:hover::before {
+    opacity: 1;
+}
+
+.card.card-modulo .card-body {
+    position: relative;
+    z-index: 1;
+}
+
+.card.card-modulo .bi {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background-color: rgba(13, 110, 253, 0.1);
+    font-size: 1.6rem !important;
+    margin-bottom: 0.5rem;
+}
+
+/* Tarjetas de estadísticas (dashboard, reportes) */
+
+.card-body h3 {
+    font-weight: 700;
+}
+
+/* ---------- Botones ---------- */
+
+.btn {
+    border-radius: 999px;
+    font-weight: 500;
+    padding-left: 1.15rem;
+    padding-right: 1.15rem;
+    transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.btn-sm {
+    border-radius: 999px;
+}
+
+.btn-primary {
+    background: var(--asada-gradiente);
+    border: none;
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.25);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    box-shadow: 0 8px 18px rgba(13, 110, 253, 0.32);
+    transform: translateY(-1px);
+}
+
+.btn-success {
+    background-color: var(--asada-verde);
+    border-color: var(--asada-verde);
+}
+
+.btn-outline-secondary,
+.btn-outline-primary,
+.btn-outline-danger,
+.btn-outline-warning,
+.btn-outline-success {
+    border-width: 1.5px;
+}
+
+/* ---------- Formularios ---------- */
+
+.form-control,
+.form-select {
+    border-radius: var(--asada-radio-sm);
+    border-color: var(--asada-borde);
+    padding-top: 0.55rem;
+    padding-bottom: 0.55rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--asada-azul);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+.form-label {
+    font-weight: 500;
+    color: var(--asada-tinta);
+}
+
+.form-check-input:checked {
+    background-color: var(--asada-teal);
+    border-color: var(--asada-teal);
+}
+
+/* ---------- Tablas ---------- */
+
+.table {
+    --bs-table-hover-bg: rgba(13, 110, 253, 0.045);
+}
+
+.table thead th {
+    background-color: var(--asada-fondo-alterno);
+    color: var(--asada-tinta);
+    font-weight: 600;
+    border-bottom: none;
+    text-transform: uppercase;
+    font-size: 0.78rem;
+    letter-spacing: 0.03em;
+}
+
+.table > :not(caption) > * > * {
+    border-bottom-width: 1px;
+    border-bottom-color: var(--asada-borde);
+}
+
+/* ---------- Badges ---------- */
+
+.badge {
+    border-radius: 999px;
+    font-weight: 500;
+    padding: 0.4em 0.75em;
+}
+
+/* ---------- Alertas ---------- */
+
+.alert {
+    border: none;
+    border-radius: var(--asada-radio-sm);
+    border-left: 4px solid transparent;
+}
+
+.alert-success {
+    border-left-color: var(--asada-verde);
+}
+
+.alert-danger {
+    border-left-color: var(--asada-rojo);
+}
+
+.alert-info {
+    border-left-color: var(--asada-teal);
 }
 
 /* ---------- Login ---------- */
 
+body.login-body {
+    background: var(--asada-gradiente);
+    background-attachment: fixed;
+}
+
 .login-card {
-    border-radius: 16px;
+    border-radius: 20px;
+    border: none;
+    box-shadow: 0 20px 45px rgba(10, 36, 62, 0.35);
 }
 
 .login-logo {
-    height: 72px;
-    width: 72px;
+    height: 76px;
+    width: 76px;
+    filter: drop-shadow(0 6px 10px rgba(13, 110, 253, 0.35));
 }
 
 /* ---------- Utilidades ---------- */
@@ -97,4 +343,12 @@ footer {
 
 .bg-asada-azul {
     background-color: var(--asada-azul) !important;
+}
+
+.bg-gradient-asada {
+    background: var(--asada-gradiente) !important;
+}
+
+.rounded-asada {
+    border-radius: var(--asada-radio) !important;
 }

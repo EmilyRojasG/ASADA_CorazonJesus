@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${'Carta ' + carta.numeroCarta + ' | ASADA'}">Carta de disponibilidad | ASADA</title>
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
+
+    <link rel="stylesheet"
+          href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@500;600;700&amp;display=swap">
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
+
+    <style>
+        .hoja-carta {
+            background: #ffffff;
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 3.5rem 3.5rem 2.5rem;
+            border-radius: var(--asada-radio);
+        }
+
+        .hoja-carta .membrete {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 3px solid var(--asada-azul);
+            padding-bottom: 1.25rem;
+            margin-bottom: 2rem;
+        }
+
+        .hoja-carta .membrete img {
+            width: 64px;
+            height: 64px;
+        }
+
+        .hoja-carta .membrete h4 {
+            margin-bottom: 0.1rem;
+        }
+
+        .hoja-carta .cuerpo {
+            line-height: 1.9;
+            text-align: justify;
+            font-size: 1.02rem;
+        }
+
+        .hoja-carta .numero-carta {
+            text-align: right;
+            font-weight: 600;
+            color: var(--asada-azul-oscuro);
+            margin-bottom: 1.5rem;
+        }
+
+        .hoja-carta .firma {
+            margin-top: 4.5rem;
+            text-align: center;
+        }
+
+        .hoja-carta .firma .linea {
+            border-top: 1px solid #333;
+            width: 280px;
+            margin: 0 auto 0.4rem;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .hoja-carta, .hoja-carta * {
+                visibility: visible;
+            }
+            .hoja-carta {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            .no-imprimir {
+                display: none !important;
+            }
+        }
+    </style>
+
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <div th:replace="~{layout/navbar :: navbar}" class="no-imprimir"></div>
+
+    <main class="flex-grow-1">
+
+        <div class="container py-4">
+
+            <div th:replace="~{layout/mensajes :: mensajes}" class="no-imprimir"></div>
+
+            <div class="d-flex justify-content-between align-items-center mb-3 no-imprimir">
+                <a href="/carta_disponibilidad/listado" class="btn btn-outline-secondary">
+                    <i class="bi bi-arrow-left"></i>
+                    Regresar
+                </a>
+                <button type="button" class="btn btn-primary" onclick="window.print();">
+                    <i class="bi bi-printer-fill"></i>
+                    Imprimir / Guardar como PDF
+                </button>
+            </div>
+
+            <div class="hoja-carta shadow-sm">
+
+                <div class="membrete">
+                    <img th:src="@{/img/logo.svg}" alt="Logo ASADA">
+                    <div>
+                        <h4 class="mb-0">ASADA Barrio Corazón de Jesús de Acosta</h4>
+                        <small class="text-muted">Asociación Administradora del Acueducto y Alcantarillado Sanitario</small>
+                    </div>
+                </div>
+
+                <div class="numero-carta">
+                    N.° <span th:text="${carta.numeroCarta}"></span>
+                </div>
+
+                <p class="text-end">
+                    Barrio Corazón de Jesús de Acosta, <span th:text="${#temporals.format(carta.fechaEmision, 'dd MMMM yyyy')}"></span>
+                </p>
+
+                <h5 class="text-center fw-bold my-4">
+                    CONSTANCIA DE DISPONIBILIDAD DE AGUA POTABLE
+                </h5>
+
+                <div class="cuerpo">
+
+                    <p>A quien interese:</p>
+
+                    <p>
+                        La Asociación Administradora del Acueducto y Alcantarillado Sanitario (ASADA)
+                        del Barrio Corazón de Jesús de Acosta hace constar que, de acuerdo con la
+                        capacidad actual del sistema de acueducto administrado por esta asociación,
+                        existe disponibilidad de agua potable para brindar el servicio a la propiedad
+                        ubicada en:
+                    </p>
+
+                    <p class="ms-4">
+                        <strong>Dirección:</strong> <span th:text="${carta.direccionPropiedad}"></span><br>
+                        <span th:if="${carta.numeroFinca != null and !carta.numeroFinca.isEmpty()}">
+                            <strong>Número de finca:</strong> <span th:text="${carta.numeroFinca}"></span><br>
+                        </span>
+                        <span th:if="${carta.planoCatastrado != null and !carta.planoCatastrado.isEmpty()}">
+                            <strong>Plano catastrado:</strong> <span th:text="${carta.planoCatastrado}"></span><br>
+                        </span>
+                    </p>
+
+                    <p>
+                        Trámite solicitado por
+                        <strong th:text="${carta.nombreSolicitante}"></strong>,
+                        portador(a) de la cédula
+                        <strong th:text="${carta.cedulaSolicitante}"></strong>.
+                    </p>
+
+                    <p th:if="${carta.observaciones != null and !carta.observaciones.isEmpty()}">
+                        <strong>Observaciones:</strong> <span th:text="${carta.observaciones}"></span>
+                    </p>
+
+                    <p>
+                        Se extiende la presente constancia a solicitud de la parte interesada, para
+                        los fines que estime convenientes, sin perjuicio de que la conexión definitiva
+                        del servicio quede sujeta al cumplimiento de los requisitos técnicos y
+                        administrativos vigentes de esta ASADA.
+                    </p>
+
+                </div>
+
+                <div class="firma">
+                    <div class="linea"></div>
+                    <p class="mb-0">
+                        <span th:text="${carta.usuario.nombre + ' ' + carta.usuario.apellidos}"></span>
+                    </p>
+                    <small class="text-muted">Junta Directiva / ASADA Barrio Corazón de Jesús de Acosta</small>
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+    <div th:replace="~{layout/footer :: footer}" class="no-imprimir"></div>
+
+    <script src="/webjars/bootstrap/5.3.7/js/bootstrap.bundle.min.js"></script>
+
+    <script th:src="@{/js/main.js}"></script>
+
+</body>
+
+</html>

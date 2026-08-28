@@ -1,0 +1,14 @@
+target/
+uploads/
+*.log
+.git/
+.gitignore
+.gitattributes
+.mvn/
+*.md
+HELP.md
+README.md
+.idea/
+*.iml
+.vscode/
+.DS_Store

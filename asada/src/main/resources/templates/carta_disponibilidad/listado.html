@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="es"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
 
@@ -9,7 +10,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Bitácora de auditoría | ASADA</title>
+    <title>Cartas de disponibilidad | ASADA</title>
 
     <link rel="stylesheet"
           href="/webjars/bootstrap/5.3.7/css/bootstrap.min.css">
@@ -41,40 +42,48 @@
 
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="fw-bold mb-0">
-                    <i class="bi bi-journal-text text-primary"></i>
-                    Bitácora de auditoría
+                    <i class="bi bi-file-earmark-check-fill text-primary"></i>
+                    Cartas de disponibilidad de agua
                 </h2>
-                <a href="/actividad/listado" class="btn btn-outline-secondary">
-                    <i class="bi bi-arrow-left"></i>
-                    Regresar a actividades
+                <a href="/carta_disponibilidad/nueva" class="btn btn-primary" sec:authorize="hasRole('AGREGAR')">
+                    <i class="bi bi-plus-lg"></i>
+                    Nueva carta
                 </a>
             </div>
 
             <div class="card shadow-sm">
                 <div class="card-body">
 
-                    <div th:if="${entradas == null or entradas.empty}" class="text-center text-muted py-4">
-                        Todavía no hay movimientos registrados en la bitácora.
+                    <div th:if="${cartas == null or cartas.empty}" class="text-center text-muted py-4">
+                        Todavía no se ha emitido ninguna carta de disponibilidad.
                     </div>
 
-                    <div class="table-responsive" th:if="${entradas != null and !entradas.empty}">
+                    <div class="table-responsive" th:if="${cartas != null and !cartas.empty}">
                         <table class="table table-striped align-middle">
                             <thead>
                                 <tr>
-                                    <th>Fecha y hora</th>
-                                    <th>Acción</th>
-                                    <th>Actividad</th>
-                                    <th>Motivo</th>
+                                    <th>N.° de carta</th>
+                                    <th>Solicitante</th>
+                                    <th>Cédula</th>
+                                    <th>Fecha de emisión</th>
+                                    <th>Emitida por</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr th:each="e : ${entradas}">
-                                    <td th:text="${#temporals.format(e.fechaAccion, 'dd/MM/yyyy HH:mm')}"></td>
-                                    <td>
-                                        <span class="fw-semibold" th:text="${e.descripcionAccion}"></span>
+                                <tr th:each="c : ${cartas}">
+                                    <td th:text="${c.numeroCarta}"></td>
+                                    <td th:text="${c.nombreSolicitante}"></td>
+                                    <td th:text="${c.cedulaSolicitante}"></td>
+                                    <td th:text="${#temporals.format(c.fechaEmision, 'dd/MM/yyyy')}"></td>
+                                    <td th:text="${c.usuario.nombre}"></td>
+                                    <td class="text-end">
+                                        <a th:href="@{/carta_disponibilidad/ver/{id}(id=${c.idCarta})}"
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye-fill"></i>
+                                            Ver / Imprimir
+                                        </a>
                                     </td>
-                                    <td th:text="${e.descripcionActividad}"></td>
-                                    <td th:text="${e.motivo != null ? e.motivo : '—'}"></td>
                                 </tr>
                             </tbody>
                         </table>

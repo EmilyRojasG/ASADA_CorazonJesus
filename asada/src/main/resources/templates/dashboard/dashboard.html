@@ -18,6 +18,11 @@
     <link rel="stylesheet"
           href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@500;600;700&amp;display=swap">
+
     <link rel="stylesheet"
           th:href="@{/css/style.css}">
 
@@ -88,7 +93,7 @@
 
                 <div class="row g-4">
 
-                    <div class="col-md-4" sec:authorize="hasAnyRole('ADMIN','SECRETARIA')">
+                    <div class="col-md-4" sec:authorize="isAuthenticated()">
                         <a href="/abonado/listado" class="text-decoration-none">
                             <div class="card card-modulo shadow-sm h-100">
                                 <div class="card-body">
@@ -100,7 +105,7 @@
                         </a>
                     </div>
 
-                    <div class="col-md-4" sec:authorize="hasAnyRole('ADMIN','SECRETARIA')">
+                    <div class="col-md-4" sec:authorize="isAuthenticated()">
                         <a href="/lectura/listado" class="text-decoration-none">
                             <div class="card card-modulo shadow-sm h-100">
                                 <div class="card-body">
@@ -112,7 +117,7 @@
                         </a>
                     </div>
 
-                    <div class="col-md-4" sec:authorize="hasAnyRole('ADMIN','SECRETARIA')">
+                    <div class="col-md-4" sec:authorize="isAuthenticated()">
                         <a href="/categoria_tarifa/listado" class="text-decoration-none">
                             <div class="card card-modulo shadow-sm h-100">
                                 <div class="card-body">
@@ -124,13 +129,49 @@
                         </a>
                     </div>
 
-                    <div class="col-md-4" sec:authorize="hasRole('ADMIN')">
+                    <div class="col-md-4" sec:authorize="isAuthenticated()">
+                        <a href="/reportes" class="text-decoration-none">
+                            <div class="card card-modulo shadow-sm h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-bar-chart-fill text-info fs-3"></i>
+                                    <h5 class="mt-2">Reportes</h5>
+                                    <p class="text-muted mb-0">Consumo por período, filtros y exportación.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-4" sec:authorize="isAuthenticated()">
+                        <a href="/actividad/listado" class="text-decoration-none">
+                            <div class="card card-modulo shadow-sm h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-tools text-danger fs-3"></i>
+                                    <h5 class="mt-2">Actividades del fontanero</h5>
+                                    <p class="text-muted mb-0">Registro de reparaciones, instalaciones y mantenimiento.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-4" sec:authorize="isAuthenticated()">
                         <a href="/usuario/listado" class="text-decoration-none">
                             <div class="card card-modulo shadow-sm h-100">
                                 <div class="card-body">
                                     <i class="bi bi-person-badge-fill text-secondary fs-3"></i>
                                     <h5 class="mt-2">Usuarios</h5>
                                     <p class="text-muted mb-0">Administrar el personal con acceso al sistema.</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-md-4" sec:authorize="isAuthenticated()">
+                        <a href="/carta_disponibilidad/listado" class="text-decoration-none">
+                            <div class="card card-modulo shadow-sm h-100">
+                                <div class="card-body">
+                                    <i class="bi bi-file-earmark-check-fill text-primary fs-3"></i>
+                                    <h5 class="mt-2">Cartas de disponibilidad</h5>
+                                    <p class="text-muted mb-0">Emitir constancias de agua para nuevos abonados.</p>
                                 </div>
                             </div>
                         </a>

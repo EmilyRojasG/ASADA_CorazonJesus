@@ -18,6 +18,11 @@
     <link rel="stylesheet"
           href="/webjars/bootstrap-icons/1.13.1/font/bootstrap-icons.min.css">
 
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Poppins:wght@500;600;700&amp;display=swap">
+
     <link rel="stylesheet"
           th:href="@{/css/style.css}">
 
@@ -40,7 +45,7 @@
                         <i class="bi bi-people-fill text-primary"></i>
                         Abonados
                     </h2>
-                    <a href="/abonado/nuevo" class="btn btn-primary" sec:authorize="hasRole('ADMIN')">
+                    <a href="/abonado/nuevo" class="btn btn-primary" sec:authorize="hasRole('AGREGAR')">
                         <i class="bi bi-plus-lg"></i>
                         Nuevo abonado
                     </a>
@@ -63,8 +68,9 @@
                                         <th>Cédula</th>
                                         <th>Categoría</th>
                                         <th>Medidor</th>
+                                        <th>Finca</th>
                                         <th>Estado</th>
-                                        <th sec:authorize="hasRole('ADMIN')"></th>
+                                        <th sec:authorize="hasAnyRole('EDITAR','ELIMINAR')"></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -79,16 +85,17 @@
                                         <td th:text="${a.cedula}"></td>
                                         <td th:text="${a.categoriaTarifa.descripcion}"></td>
                                         <td th:text="${a.numeroMedidor}"></td>
+                                        <td th:text="${a.numeroFinca}"></td>
                                         <td>
                                             <span class="badge" th:classappend="${a.activo ? 'bg-success' : 'bg-secondary'}"
                                                   th:text="${a.activo ? 'Activo' : 'Inactivo'}"></span>
                                         </td>
-                                        <td sec:authorize="hasRole('ADMIN')" class="text-end">
+                                        <td sec:authorize="hasAnyRole('EDITAR','ELIMINAR')" class="text-end">
                                             <a th:href="@{/abonado/modificar/{id}(id=${a.idAbonado})}"
-                                               class="btn btn-sm btn-outline-warning">
+                                               class="btn btn-sm btn-outline-warning" sec:authorize="hasRole('EDITAR')">
                                                 <i class="bi bi-pencil-fill"></i>
                                             </a>
-                                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                            <button type="button" class="btn btn-sm btn-outline-danger" sec:authorize="hasRole('ELIMINAR')"
                                                     data-bs-toggle="modal"
                                                     th:data-bs-target="'#eliminarModal' + ${a.idAbonado}">
                                                 <i class="bi bi-trash-fill"></i>

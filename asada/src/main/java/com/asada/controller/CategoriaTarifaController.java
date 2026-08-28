@@ -1,6 +1,7 @@
 package com.asada.controller;
 
 import com.asada.domain.CategoriaTarifa;
+import com.asada.security.PermisoUtil;
 import com.asada.service.CategoriaTarifaService;
 import jakarta.validation.Valid;
 import java.util.Optional;
@@ -60,6 +61,8 @@ public class CategoriaTarifaController {
         if (bindingResult.hasErrors()) {
             return "categoria/formulario";
         }
+
+        PermisoUtil.requiereRol(categoriaTarifa.getIdCategoriaTarifa() == null ? "AGREGAR" : "EDITAR");
 
         try {
             categoriaTarifaService.save(categoriaTarifa);

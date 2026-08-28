@@ -1,0 +1,24 @@
+# Render Blueprint (opcional). Permite crear el servicio desde
+# "New +" -> "Blueprint" en el panel de Render, apuntando a este
+# repositorio, en lugar de configurar el servicio manualmente.
+#
+# Las variables marcadas con "sync: false" deben completarse a mano en
+# el panel de Render después de crear el servicio (no se guardan en el
+# repositorio por seguridad).
+
+services:
+  - type: web
+    name: asada-corazon-jesus
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    region: oregon
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: render
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false

@@ -53,6 +53,9 @@ public class Abonado implements Serializable {
     @Column(length = 255)
     private String direccion;
 
+    @Column(name = "numero_finca", length = 25)
+    private String numeroFinca;
+
     @Column(length = 25)
     private String telefono;
 
@@ -127,6 +130,14 @@ public class Abonado implements Serializable {
 
     public void setDireccion(String direccion) {
         this.direccion = direccion;
+    }
+
+    public String getNumeroFinca() {
+        return numeroFinca;
+    }
+
+    public void setNumeroFinca(String numeroFinca) {
+        this.numeroFinca = numeroFinca;
     }
 
     public String getTelefono() {

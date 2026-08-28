@@ -1,6 +1,7 @@
 package com.asada.controller;
 
 import com.asada.domain.Usuario;
+import com.asada.security.PermisoUtil;
 import com.asada.service.UsuarioService;
 import jakarta.validation.Valid;
 import java.util.HashSet;
@@ -79,6 +80,8 @@ public class UsuarioController {
             model.addAttribute("idsRolesSeleccionados", idsRoles == null ? Set.of() : idsRoles);
             return "usuario/formulario";
         }
+
+        PermisoUtil.requiereRol(usuario.getIdUsuario() == null ? "AGREGAR" : "EDITAR");
 
         try {
             usuarioService.save(usuario, imagenFile, idsRoles);
