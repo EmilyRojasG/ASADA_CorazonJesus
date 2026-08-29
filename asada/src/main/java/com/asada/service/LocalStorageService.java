@@ -7,20 +7,25 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Servicio de almacenamiento de imágenes en disco local.
  *
- * Durante la Entrega 1 y 2 las imágenes de usuarios y abonados se guardan
- * en una carpeta local del servidor. En la Entrega 3 este servicio será
- * reemplazado por uno equivalente que suba las imágenes a Firebase
- * Storage, manteniendo la misma firma de método para minimizar el
- * impacto en los controladores y servicios que lo utilizan.
+ * Es el proveedor de imágenes por defecto (desarrollo local, o cuando no
+ * se configura explícitamente Firebase). Se activa cuando
+ * {@code asada.storage.provider} es "local" o no está definida.
+ *
+ * ADVERTENCIA para Render: el sistema de archivos de un servicio web ahí
+ * es efímero -- lo guardado aquí se pierde en cada reinicio o despliegue.
+ * Para persistir imágenes en producción, usa {@link FirebaseStorageService}
+ * configurando {@code asada.storage.provider=firebase}.
  */
 @Service
-public class LocalStorageService {
+@ConditionalOnProperty(name = "asada.storage.provider", havingValue = "local", matchIfMissing = true)
+public class LocalStorageService implements ImageStorageService {
 
     @Value("${asada.upload.dir:uploads}")
     private String uploadDir;
@@ -42,6 +47,7 @@ public class LocalStorageService {
      * y devuelve la ruta pública (relativa) con la que se puede mostrar en
      * las vistas, por ejemplo {@code /uploads/abonado/img12.jpg}.
      */
+    @Override
     public String uploadImage(MultipartFile file, String folder, Integer id) throws IOException {
         if (file == null || file.isEmpty()) {
             return null;

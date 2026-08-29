@@ -21,6 +21,7 @@
 
     <properties>
         <java.version>21</java.version>
+        <google-cloud-storage.version>2.40.1</google-cloud-storage.version>
     </properties>
 
     <dependencies>
@@ -102,6 +103,18 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+
+        <!--
+            Firebase / Google Cloud Storage (almacenamiento de imágenes
+            en producción). Solo se usa si "asada.storage.provider=firebase"
+            está activo; mientras tanto, esta dependencia va en el jar pero
+            FirebaseStorageService no se instancia (ver @ConditionalOnProperty).
+        -->
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>google-cloud-storage</artifactId>
+            <version>${google-cloud-storage.version}</version>
         </dependency>
 
     </dependencies>

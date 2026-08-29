@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
@@ -32,6 +33,21 @@ public class PerfilController {
         var usuario = usuarioRepository.findByUsernameConRoles(principal.getName()).orElse(null);
         model.addAttribute("usuario", usuario);
         return "perfil/perfil";
+    }
+
+    @PostMapping("/cambiar-foto")
+    public String cambiarFoto(Principal principal,
+            @RequestParam("imagenFile") MultipartFile imagenFile,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+            usuarioService.cambiarFotoPerfil(principal.getName(), imagenFile);
+            redirectAttributes.addFlashAttribute("todoOk", "Foto de perfil actualizada correctamente.");
+        } catch (IllegalArgumentException | IllegalStateException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+        }
+
+        return "redirect:/perfil";
     }
 
     @PostMapping("/cambiar-password")

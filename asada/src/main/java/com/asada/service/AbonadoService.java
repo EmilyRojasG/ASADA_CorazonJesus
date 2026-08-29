@@ -14,11 +14,11 @@ import org.springframework.web.multipart.MultipartFile;
 public class AbonadoService {
 
     private final AbonadoRepository abonadoRepository;
-    private final LocalStorageService localStorageService;
+    private final ImageStorageService imageStorageService;
 
-    public AbonadoService(AbonadoRepository abonadoRepository, LocalStorageService localStorageService) {
+    public AbonadoService(AbonadoRepository abonadoRepository, ImageStorageService imageStorageService) {
         this.abonadoRepository = abonadoRepository;
-        this.localStorageService = localStorageService;
+        this.imageStorageService = imageStorageService;
     }
 
     @Transactional(readOnly = true)
@@ -56,7 +56,7 @@ public class AbonadoService {
 
         if (imagenFile != null && !imagenFile.isEmpty()) {
             try {
-                String rutaImagen = localStorageService.uploadImage(imagenFile, "abonado", guardado.getIdAbonado());
+                String rutaImagen = imageStorageService.uploadImage(imagenFile, "abonado", guardado.getIdAbonado());
                 guardado.setRutaImagen(rutaImagen);
                 abonadoRepository.save(guardado);
             } catch (IOException e) {

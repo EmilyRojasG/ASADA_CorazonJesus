@@ -20,16 +20,16 @@ public class UsuarioService {
 
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
-    private final LocalStorageService localStorageService;
+    private final ImageStorageService imageStorageService;
     private final PasswordEncoder passwordEncoder;
 
     public UsuarioService(UsuarioRepository usuarioRepository,
             RolRepository rolRepository,
-            LocalStorageService localStorageService,
+            ImageStorageService imageStorageService,
             PasswordEncoder passwordEncoder) {
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
-        this.localStorageService = localStorageService;
+        this.imageStorageService = imageStorageService;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -109,12 +109,35 @@ public class UsuarioService {
 
         if (imagenFile != null && !imagenFile.isEmpty()) {
             try {
-                String rutaImagen = localStorageService.uploadImage(imagenFile, "usuario", usuario.getIdUsuario());
+                String rutaImagen = imageStorageService.uploadImage(imagenFile, "usuario", usuario.getIdUsuario());
                 usuario.setRutaImagen(rutaImagen);
                 usuarioRepository.save(usuario);
             } catch (IOException e) {
                 throw new IllegalStateException("No se pudo guardar la imagen del usuario.", e);
             }
+        }
+    }
+
+    /**
+     * Permite a un usuario ya autenticado cambiar únicamente su propia
+     * foto de perfil, sin tener que pasar por el formulario completo de
+     * edición (que además requiere permiso EDITAR).
+     */
+    @Transactional
+    public void cambiarFotoPerfil(String username, MultipartFile imagenFile) {
+        if (imagenFile == null || imagenFile.isEmpty()) {
+            throw new IllegalArgumentException("Debe seleccionar una imagen.");
+        }
+
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("El usuario no fue encontrado."));
+
+        try {
+            String rutaImagen = imageStorageService.uploadImage(imagenFile, "usuario", usuario.getIdUsuario());
+            usuario.setRutaImagen(rutaImagen);
+            usuarioRepository.save(usuario);
+        } catch (IOException e) {
+            throw new IllegalStateException("No se pudo guardar la nueva foto de perfil.", e);
         }
     }
 

@@ -25,9 +25,14 @@
 
 /* ---------- Base ---------- */
 
-html,
+html {
+    min-height: 100%;
+}
+
 body {
-    height: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 body {
@@ -49,7 +54,11 @@ h1, h2, h3, h4, h5, h6,
 }
 
 main {
-    min-height: 70vh;
+    flex: 1 0 auto;
+}
+
+footer {
+    flex-shrink: 0;
 }
 
 a {
