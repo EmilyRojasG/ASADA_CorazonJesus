@@ -73,8 +73,11 @@ INSERT INTO ruta (ruta, id_rol) VALUES
 -- Lecturas (registrar = agregar; no se editan, solo se registran o
 -- se eliminan si están mal digitadas)
 ('/lectura/nueva', 2),
+('/lectura/nueva', 5),
 ('/lectura/guardar', 2),
+('/lectura/guardar', 5),
 ('/lectura/eliminar', 4),
+('/lectura/eliminar', 5),
 ('/lectura/listado', 1),
 ('/lectura/historial/**', 1),
 -- Actividades del fontanero: solo quien tenga el permiso FONTANERO

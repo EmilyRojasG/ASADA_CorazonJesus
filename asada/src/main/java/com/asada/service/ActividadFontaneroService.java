@@ -7,6 +7,7 @@ import com.asada.domain.BitacoraActividad.Accion;
 import com.asada.domain.Usuario;
 import com.asada.repository.ActividadFontaneroRepository;
 import com.asada.repository.BitacoraActividadRepository;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -48,7 +49,7 @@ public class ActividadFontaneroService {
 
     @Transactional
     public void registrar(Usuario fontanero, Abonado abonado, String tipoActividad,
-            String descripcion, LocalDate fechaActividad) {
+            String descripcion, LocalDate fechaActividad, BigDecimal horasTrabajadas) {
 
         ActividadFontanero actividad = new ActividadFontanero();
         actividad.setUsuario(fontanero);
@@ -56,6 +57,7 @@ public class ActividadFontaneroService {
         actividad.setTipoActividad(tipoActividad);
         actividad.setDescripcion(descripcion);
         actividad.setFechaActividad(fechaActividad);
+        actividad.setHorasTrabajadas(horasTrabajadas);
         actividad = actividadRepository.save(actividad);
 
         registrarBitacora(fontanero, Accion.REGISTRO, actividad, null);
@@ -63,7 +65,8 @@ public class ActividadFontaneroService {
 
     @Transactional
     public void modificar(Usuario fontanero, Integer idActividad, Abonado abonado,
-            String tipoActividad, String descripcion, LocalDate fechaActividad, String motivo) {
+            String tipoActividad, String descripcion, LocalDate fechaActividad,
+            BigDecimal horasTrabajadas, String motivo) {
 
         if (motivo == null || motivo.isBlank()) {
             throw new IllegalArgumentException("Debe indicar el motivo de la edición.");
@@ -76,6 +79,7 @@ public class ActividadFontaneroService {
         actividad.setTipoActividad(tipoActividad);
         actividad.setDescripcion(descripcion);
         actividad.setFechaActividad(fechaActividad);
+        actividad.setHorasTrabajadas(horasTrabajadas);
         actividad = actividadRepository.save(actividad);
 
         registrarBitacora(fontanero, Accion.EDICION, actividad, motivo);

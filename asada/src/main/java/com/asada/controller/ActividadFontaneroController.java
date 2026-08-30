@@ -6,6 +6,7 @@ import com.asada.domain.Usuario;
 import com.asada.repository.AbonadoRepository;
 import com.asada.repository.UsuarioRepository;
 import com.asada.service.ActividadFontaneroService;
+import java.math.BigDecimal;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
@@ -85,6 +86,7 @@ public class ActividadFontaneroController {
             @RequestParam String tipoActividad,
             @RequestParam String descripcion,
             @RequestParam LocalDate fechaActividad,
+            @RequestParam(required = false) BigDecimal horasTrabajadas,
             @RequestParam(required = false) String motivo,
             Principal principal,
             RedirectAttributes redirectAttributes) {
@@ -99,11 +101,12 @@ public class ActividadFontaneroController {
 
         try {
             if (idActividad == null) {
-                actividadFontaneroService.registrar(fontanero, abonado, tipoActividad, descripcion, fechaActividad);
+                actividadFontaneroService.registrar(fontanero, abonado, tipoActividad, descripcion,
+                        fechaActividad, horasTrabajadas);
                 redirectAttributes.addFlashAttribute("todoOk", "Actividad registrada correctamente.");
             } else {
                 actividadFontaneroService.modificar(fontanero, idActividad, abonado, tipoActividad,
-                        descripcion, fechaActividad, motivo);
+                        descripcion, fechaActividad, horasTrabajadas, motivo);
                 redirectAttributes.addFlashAttribute("todoOk", "Actividad modificada correctamente.");
             }
         } catch (IllegalArgumentException e) {

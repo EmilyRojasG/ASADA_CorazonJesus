@@ -156,6 +156,7 @@ CREATE TABLE actividad_fontanero (
   tipo_actividad VARCHAR(60) NOT NULL,
   descripcion VARCHAR(500) NOT NULL,
   fecha_actividad DATE NOT NULL,
+  horas_trabajadas DECIMAL(5,2) NULL,
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   fecha_modificacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (id_actividad),

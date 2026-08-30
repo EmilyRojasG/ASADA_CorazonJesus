@@ -64,6 +64,7 @@
                                 <tr>
                                     <th>Fecha</th>
                                     <th>Tipo de actividad</th>
+                                    <th>Horas</th>
                                     <th>Abonado</th>
                                     <th>Descripción</th>
                                     <th>Registrada por</th>
@@ -74,6 +75,7 @@
                                 <tr th:each="a : ${actividades}">
                                     <td th:text="${#temporals.format(a.fechaActividad, 'dd/MM/yyyy')}"></td>
                                     <td th:text="${a.tipoActividad}"></td>
+                                    <td th:text="${a.horasTrabajadas != null ? a.horasTrabajadas : '—'}"></td>
                                     <td th:text="${a.abonado != null ? (a.abonado.numeroAbonado + ' - ' + a.abonado.nombre + ' ' + a.abonado.apellidos) : 'N/A'}"></td>
                                     <td th:text="${a.descripcion}"></td>
                                     <td th:text="${a.usuario.nombre}"></td>

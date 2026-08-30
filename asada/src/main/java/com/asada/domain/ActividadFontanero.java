@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -51,6 +52,9 @@ public class ActividadFontanero implements Serializable {
     @NotNull
     @Column(name = "fecha_actividad", nullable = false)
     private LocalDate fechaActividad;
+
+    @Column(name = "horas_trabajadas", precision = 5, scale = 2)
+    private BigDecimal horasTrabajadas;
 
     @Column(name = "fecha_creacion", insertable = false, updatable = false)
     private LocalDateTime fechaCreacion;
@@ -107,6 +111,14 @@ public class ActividadFontanero implements Serializable {
 
     public void setFechaActividad(LocalDate fechaActividad) {
         this.fechaActividad = fechaActividad;
+    }
+
+    public BigDecimal getHorasTrabajadas() {
+        return horasTrabajadas;
+    }
+
+    public void setHorasTrabajadas(BigDecimal horasTrabajadas) {
+        this.horasTrabajadas = horasTrabajadas;
     }
 
     public LocalDateTime getFechaCreacion() {
