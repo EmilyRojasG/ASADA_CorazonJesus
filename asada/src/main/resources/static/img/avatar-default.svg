@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200" role="img" aria-label="Foto de perfil por defecto">
+  <rect width="200" height="200" fill="#d9dce1"/>
+  <clipPath id="avatarClip">
+    <circle cx="100" cy="100" r="100"/>
+  </clipPath>
+  <g clip-path="url(#avatarClip)">
+    <rect width="200" height="200" fill="#d9dce1"/>
+    <ellipse cx="100" cy="86" rx="38" ry="46" fill="#6b7280"/>
+    <path d="M100 148c-48 0-76 30-84 62 0 20 168 20 168 0-8-32-36-62-84-62z" fill="#6b7280"/>
+  </g>
+</svg>

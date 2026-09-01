@@ -36,4 +36,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     @Query("SELECT u FROM Usuario u LEFT JOIN FETCH u.roles WHERE u.username = :username")
     Optional<Usuario> findByUsernameConRoles(@Param("username") String username);
 
+    /**
+     * Usuarios activos que tienen un permiso determinado (por ejemplo,
+     * "EDITAR"), usado para mostrar a quién contactar cuando alguien
+     * olvida su contraseña, ya que solo quien puede EDITAR usuarios
+     * puede restablecerle la contraseña a otra persona.
+     */
+    @Query("SELECT DISTINCT u FROM Usuario u JOIN u.roles r "
+            + "WHERE r.rol = :rol AND u.activo = true ORDER BY u.nombre")
+    List<Usuario> findByRolYActivoTrue(@Param("rol") String rol);
+
 }

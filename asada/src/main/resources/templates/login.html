@@ -78,16 +78,6 @@
 
                     </div>
 
-                    <div th:if="${passwordActualizada}"
-                         class="alert alert-success"
-                         role="alert">
-
-                        <i class="bi bi-check-circle-fill"></i>
-
-                        Contraseña actualizada correctamente. Ya puede iniciar sesión.
-
-                    </div>
-
                     <form th:action="@{/login}"
                           method="post">
 
@@ -152,7 +142,7 @@
                     <div class="text-center mt-3">
                         <a href="/login/actualizar-password" class="small">
                             <i class="bi bi-key-fill"></i>
-                            ¿Olvidó su contraseña? Actualícela aquí
+                            ¿Olvidó su contraseña?
                         </a>
                     </div>
 

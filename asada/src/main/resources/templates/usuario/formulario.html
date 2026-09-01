@@ -58,9 +58,8 @@
                                     <input type="hidden" th:field="*{rutaImagen}">
 
                                     <div class="text-center mb-4">
-                                        <img th:if="${usuario.rutaImagen != null}" th:src="@{${usuario.rutaImagen}}"
+                                        <img th:src="@{${usuario.rutaImagen != null ? usuario.rutaImagen : '/img/avatar-default.svg'}}"
                                              alt="Foto actual" class="rounded-circle mb-2" style="width: 90px; height: 90px; object-fit: cover;">
-                                        <i th:if="${usuario.rutaImagen == null}" class="bi bi-person-circle text-secondary" style="font-size: 5rem;"></i>
                                         <div>
                                             <label class="form-label small text-muted">Foto de perfil</label>
                                             <input type="file" name="imagenFile" accept="image/*" class="form-control form-control-sm">

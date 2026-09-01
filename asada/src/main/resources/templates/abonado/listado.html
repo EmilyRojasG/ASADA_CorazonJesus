@@ -76,9 +76,8 @@
                                 <tbody>
                                     <tr th:each="a : ${abonados}">
                                         <td>
-                                            <img th:if="${a.rutaImagen != null}" th:src="@{${a.rutaImagen}}"
+                                            <img th:src="@{${a.rutaImagen != null ? a.rutaImagen : '/img/avatar-default.svg'}}"
                                                  alt="Foto" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
-                                            <i th:if="${a.rutaImagen == null}" class="bi bi-person-circle fs-3 text-secondary"></i>
                                         </td>
                                         <td th:text="${a.numeroAbonado}"></td>
                                         <td th:text="${a.nombre + ' ' + a.apellidos}"></td>

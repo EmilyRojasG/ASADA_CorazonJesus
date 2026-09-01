@@ -1,56 +1,34 @@
 package com.asada.controller;
 
-import com.asada.service.UsuarioService;
+import com.asada.repository.UsuarioRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 /**
- * Permite actualizar la contraseña desde la pantalla de login, sin
- * necesidad de estar autenticado, verificando la contraseña actual del
- * usuario (no requiere correo/SMTP configurado).
+ * Pantalla de "olvidé mi contraseña", accesible desde el login sin estar
+ * autenticado.
+ *
+ * Como el sistema no tiene un servicio de correo (SMTP) configurado, no
+ * es posible enviar un enlace de restablecimiento por email. En su lugar,
+ * esta pantalla es informativa: le indica a la persona que contacte a un
+ * administrador (alguien con permiso EDITAR), quien puede asignarle una
+ * nueva contraseña desde Usuarios -> Editar sin necesitar la anterior
+ * (esa función ya existe en UsuarioController/UsuarioService).
  */
 @Controller
 public class PasswordController {
 
-    private final UsuarioService usuarioService;
+    private final UsuarioRepository usuarioRepository;
 
-    public PasswordController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
+    public PasswordController(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
     }
 
     @GetMapping("/login/actualizar-password")
-    public String formulario() {
+    public String informacion(Model model) {
+        model.addAttribute("administradores", usuarioRepository.findByRolYActivoTrue("EDITAR"));
         return "login-actualizar-password";
-    }
-
-    @PostMapping("/login/actualizar-password")
-    public String actualizar(@RequestParam String username,
-            @RequestParam String passwordActual,
-            @RequestParam String passwordNueva,
-            @RequestParam String passwordConfirmar,
-            Model model,
-            RedirectAttributes redirectAttributes) {
-
-        if (!passwordNueva.equals(passwordConfirmar)) {
-            model.addAttribute("error", "La nueva contraseña y su confirmación no coinciden.");
-            model.addAttribute("username", username);
-            return "login-actualizar-password";
-        }
-
-        try {
-            usuarioService.cambiarPassword(username, passwordActual, passwordNueva);
-        } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
-            model.addAttribute("username", username);
-            return "login-actualizar-password";
-        }
-
-        redirectAttributes.addFlashAttribute("passwordActualizada", true);
-        return "redirect:/login";
     }
 
 }

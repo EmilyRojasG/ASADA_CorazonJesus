@@ -50,11 +50,9 @@
                     <div class="card shadow-sm">
                         <div class="card-body text-center">
 
-                            <img th:if="${usuario.rutaImagen != null}" th:src="@{${usuario.rutaImagen}}"
+                            <img th:src="@{${usuario.rutaImagen != null ? usuario.rutaImagen : '/img/avatar-default.svg'}}"
                                  alt="Foto de perfil" class="rounded-circle mb-3"
                                  style="width: 110px; height: 110px; object-fit: cover;">
-                            <i th:if="${usuario.rutaImagen == null}" class="bi bi-person-circle text-secondary"
-                               style="font-size: 7rem;"></i>
 
                             <h4 class="mt-2 mb-0" th:text="${usuario.nombre + ' ' + usuario.apellidos}"></h4>
                             <p class="text-muted mb-2">@<span th:text="${usuario.username}"></span></p>
