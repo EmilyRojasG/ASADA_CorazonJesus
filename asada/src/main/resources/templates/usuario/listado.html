@@ -74,7 +74,8 @@
                                 <tbody>
                                     <tr th:each="u : ${usuarios}">
                                         <td>
-                                            <img th:src="@{${u.rutaImagen != null ? u.rutaImagen : '/img/avatar-default.svg'}}"
+                                            <img th:with="rutaFoto=${u.rutaImagen != null ? u.rutaImagen : '/img/avatar-default.svg'}"
+                                                 th:src="@{${rutaFoto}}"
                                                  alt="Foto" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
                                         </td>
                                         <td th:text="${u.username}"></td>
