@@ -50,7 +50,7 @@
                     <div class="card shadow-sm">
                         <div class="card-body text-center">
 
-                            <img th:with="rutaFoto=${usuario.rutaImagen != null ? usuario.rutaImagen : '/img/avatar-default.svg'}"
+                            <img th:with="rutaFoto=${usuario.rutaImagen != null and !usuario.rutaImagen.isEmpty() ? usuario.rutaImagen : '/img/avatar-default.svg'}"
                                  th:src="@{${rutaFoto}}"
                                  alt="Foto de perfil" class="rounded-circle mb-3"
                                  style="width: 110px; height: 110px; object-fit: cover;">

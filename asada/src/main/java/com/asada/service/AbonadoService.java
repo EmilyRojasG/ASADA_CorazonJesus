@@ -39,6 +39,14 @@ public class AbonadoService {
 
         final Integer idAbonadoActual = abonado.getIdAbonado();
 
+        // El campo oculto "rutaImagen" del formulario envía una cadena
+        // vacía (no null) cuando el abonado todavía no tiene foto; se
+        // normaliza aquí para que la base de datos siempre guarde NULL
+        // en ese caso, no "".
+        if (abonado.getRutaImagen() != null && abonado.getRutaImagen().isBlank()) {
+            abonado.setRutaImagen(null);
+        }
+
         // Valida duplicados de cédula y número de abonado antes de guardar
         abonadoRepository.findByNumeroAbonado(abonado.getNumeroAbonado()).ifPresent(existente -> {
             if (idAbonadoActual == null || !existente.getIdAbonado().equals(idAbonadoActual)) {

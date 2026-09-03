@@ -58,7 +58,7 @@
                                     <input type="hidden" th:field="*{rutaImagen}">
 
                                     <div class="text-center mb-4">
-                                        <img th:with="rutaFoto=${usuario.rutaImagen != null ? usuario.rutaImagen : '/img/avatar-default.svg'}"
+                                        <img th:with="rutaFoto=${usuario.rutaImagen != null and !usuario.rutaImagen.isEmpty() ? usuario.rutaImagen : '/img/avatar-default.svg'}"
                                              th:src="@{${rutaFoto}}"
                                              alt="Foto actual" class="rounded-circle mb-2" style="width: 90px; height: 90px; object-fit: cover;">
                                         <div>

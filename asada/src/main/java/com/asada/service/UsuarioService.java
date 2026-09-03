@@ -66,6 +66,14 @@ public class UsuarioService {
         boolean esNuevo = usuario.getIdUsuario() == null;
         final Integer idUsuarioActual = usuario.getIdUsuario();
 
+        // El campo oculto "rutaImagen" del formulario envía una cadena
+        // vacía (no null) cuando el usuario todavía no tiene foto; se
+        // normaliza aquí para que la base de datos siempre guarde NULL
+        // en ese caso, no "".
+        if (usuario.getRutaImagen() != null && usuario.getRutaImagen().isBlank()) {
+            usuario.setRutaImagen(null);
+        }
+
         // Verifica duplicados de username/correo excluyendo al propio usuario
         usuarioRepository.findByUsername(usuario.getUsername()).ifPresent(existente -> {
             if (esNuevo || !existente.getIdUsuario().equals(idUsuarioActual)) {

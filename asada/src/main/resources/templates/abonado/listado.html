@@ -76,7 +76,7 @@
                                 <tbody>
                                     <tr th:each="a : ${abonados}">
                                         <td>
-                                            <img th:with="rutaFoto=${a.rutaImagen != null ? a.rutaImagen : '/img/avatar-default.svg'}"
+                                            <img th:with="rutaFoto=${a.rutaImagen != null and !a.rutaImagen.isEmpty() ? a.rutaImagen : '/img/avatar-default.svg'}"
                                                  th:src="@{${rutaFoto}}"
                                                  alt="Foto" class="rounded-circle" style="width: 40px; height: 40px; object-fit: cover;">
                                         </td>
