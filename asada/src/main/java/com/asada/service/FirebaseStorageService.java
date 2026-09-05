@@ -116,4 +116,37 @@ public class FirebaseStorageService implements ImageStorageService {
         return String.format("https://storage.googleapis.com/%s/%s", bucketName, objectName);
     }
 
+    /**
+     * Sube un archivo de cualquier tipo bajo un nombre único, lo hace
+     * público, y devuelve su URL. Conserva el nombre original en el
+     * nombre del objeto (después del UUID) solo para facilitar la
+     * inspección manual del bucket; el nombre que se muestra al usuario
+     * en la aplicación siempre es el guardado en la base de datos.
+     */
+    @Override
+    public String uploadFile(MultipartFile file, String folder) throws IOException {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+
+        String extension = "";
+        String originalName = file.getOriginalFilename();
+        if (originalName != null && originalName.contains(".")) {
+            extension = originalName.substring(originalName.lastIndexOf('.'));
+        }
+
+        String nombreArchivo = UUID.randomUUID().toString().substring(0, 8) + extension;
+        String objectName = folder + "/" + nombreArchivo;
+
+        BlobId blobId = BlobId.of(bucketName, objectName);
+        BlobInfo blobInfo = BlobInfo.newBuilder(blobId)
+                .setContentType(file.getContentType())
+                .build();
+
+        storage.create(blobInfo, file.getBytes());
+        storage.createAcl(blobId, Acl.of(Acl.User.ofAllUsers(), Acl.Role.READER));
+
+        return String.format("https://storage.googleapis.com/%s/%s", bucketName, objectName);
+    }
+
 }

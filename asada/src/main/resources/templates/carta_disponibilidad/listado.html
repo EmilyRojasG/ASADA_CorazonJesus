@@ -83,6 +83,68 @@
                                             <i class="bi bi-eye-fill"></i>
                                             Ver / Imprimir
                                         </a>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary"
+                                                data-bs-toggle="modal"
+                                                th:data-bs-target="'#archivosModal' + ${c.idCarta}">
+                                            <i class="bi bi-paperclip"></i>
+                                            Archivos
+                                            <span class="badge bg-secondary"
+                                                  th:if="${archivosPorCarta.get(c.idCarta) != null}"
+                                                  th:text="${archivosPorCarta.get(c.idCarta).size()}"></span>
+                                        </button>
+
+                                        <div class="modal fade" th:id="'archivosModal' + ${c.idCarta}" tabindex="-1">
+                                            <div class="modal-dialog modal-dialog-scrollable">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title">
+                                                            Archivos de la carta
+                                                            <span th:text="${c.numeroCarta}"></span>
+                                                        </h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                    </div>
+                                                    <div class="modal-body text-start">
+
+                                                        <div th:if="${archivosPorCarta.get(c.idCarta) == null}"
+                                                             class="text-muted text-center py-3">
+                                                            Todavía no hay archivos adjuntos.
+                                                        </div>
+
+                                                        <ul class="list-group mb-3" th:if="${archivosPorCarta.get(c.idCarta) != null}">
+                                                            <li class="list-group-item d-flex justify-content-between align-items-center"
+                                                                th:each="archivo : ${archivosPorCarta.get(c.idCarta)}">
+                                                                <div class="text-truncate me-2">
+                                                                    <i class="bi bi-file-earmark-fill text-secondary"></i>
+                                                                    <span th:text="${archivo.nombreOriginal}"></span>
+                                                                    <div class="small text-muted">
+                                                                        <span th:text="${#temporals.format(archivo.fechaSubida, 'dd/MM/yyyy HH:mm')}"></span>
+                                                                        · <span th:text="${archivo.usuario.nombre}"></span>
+                                                                    </div>
+                                                                </div>
+                                                                <a th:href="@{${archivo.rutaArchivo}}" target="_blank"
+                                                                   class="btn btn-sm btn-outline-primary flex-shrink-0">
+                                                                    <i class="bi bi-download"></i>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+
+                                                        <form th:action="@{/carta_disponibilidad/{id}/archivos/subir(id=${c.idCarta})}"
+                                                              method="post" enctype="multipart/form-data"
+                                                              sec:authorize="hasRole('AGREGAR')">
+                                                            <label class="form-label small text-muted mb-1">Agregar archivo(s)</label>
+                                                            <div class="input-group">
+                                                                <input type="file" name="archivos" multiple class="form-control" required>
+                                                                <button type="submit" class="btn btn-primary">
+                                                                    <i class="bi bi-upload"></i>
+                                                                    Subir
+                                                                </button>
+                                                            </div>
+                                                        </form>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             </tbody>

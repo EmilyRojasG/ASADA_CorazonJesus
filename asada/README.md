@@ -72,10 +72,16 @@ como referencia de arquitectura, seguridad y buenas prácticas.
   construcción), sin necesidad de que la persona ya esté registrada como
   abonado.
 - Numeración automática y correlativa por año (`CD-2026-0001`, etc.).
-- Vista imprimible con membrete, listo para "Imprimir / Guardar como PDF"
-  desde el navegador (no requiere librerías adicionales de generación de
-  PDF).
-- Historial de todas las cartas emitidas.
+- Vista imprimible que replica el machote oficial de la ASADA (mismo
+  encabezado, pie de página, sello y firma), lista para "Imprimir /
+  Guardar como PDF" desde el navegador (no requiere librerías
+  adicionales de generación de PDF).
+- Campos "Número de finca" y "Número de plano / N.° de presentación"
+  son independientes y opcionales entre sí: se puede llenar solo uno,
+  el otro, o ambos, según lo que tenga disponible el solicitante.
+- Historial de todas las cartas emitidas, con un botón por carta para
+  **adjuntar archivos de cualquier tipo** (PDF, Word, imágenes
+  escaneadas, etc.), verlos y descargarlos desde el mismo listado.
 
 ### ✅ Perfil de usuario y actualización de contraseña
 
@@ -202,6 +208,7 @@ cualquier combinación de estos 4). El único permiso "especial" es
 | Actividades del fontanero | `/actividad/nueva`, `/guardar`, `/modificar/**`, `/eliminar/**` | FONTANERO |
 | Actividades del fontanero, Bitácora | `/actividad/listado`, `/bitacora/listado` | VER o FONTANERO |
 | Cartas de disponibilidad | `/carta_disponibilidad/nueva`, `/guardar` | AGREGAR |
+| Cartas de disponibilidad | `/carta_disponibilidad/*/archivos/subir` | AGREGAR |
 | Cartas de disponibilidad | `/carta_disponibilidad/listado`, `/ver/**` | VER |
 
 > Datos de prueba: `admin` e `imora` tienen los 4 permisos generales

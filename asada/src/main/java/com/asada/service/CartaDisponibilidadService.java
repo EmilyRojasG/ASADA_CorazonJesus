@@ -36,6 +36,13 @@ public class CartaDisponibilidadService {
     public CartaDisponibilidad emitir(Usuario usuario, String nombreSolicitante, String cedulaSolicitante,
             String direccionPropiedad, String numeroFinca, String planoCatastrado, String observaciones) {
 
+        boolean sinFinca = numeroFinca == null || numeroFinca.isBlank();
+        boolean sinPlano = planoCatastrado == null || planoCatastrado.isBlank();
+        if (sinFinca && sinPlano) {
+            throw new IllegalArgumentException(
+                    "Debe indicar al menos el número de finca o el número de plano/presentación.");
+        }
+
         CartaDisponibilidad carta = new CartaDisponibilidad();
         carta.setUsuario(usuario);
         carta.setNombreSolicitante(nombreSolicitante);

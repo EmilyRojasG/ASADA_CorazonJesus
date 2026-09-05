@@ -32,50 +32,65 @@
             background: #ffffff;
             max-width: 850px;
             margin: 0 auto;
-            padding: 3.5rem 3.5rem 2.5rem;
             border-radius: var(--asada-radio);
-        }
-
-        .hoja-carta .membrete {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            border-bottom: 3px solid var(--asada-azul);
-            padding-bottom: 1.25rem;
-            margin-bottom: 2rem;
+            overflow: hidden;
         }
 
         .hoja-carta .membrete img {
-            width: 64px;
-            height: 64px;
+            display: block;
+            width: 100%;
+            height: auto;
         }
 
-        .hoja-carta .membrete h4 {
-            margin-bottom: 0.1rem;
+        .hoja-carta .cuerpo-carta {
+            padding: 1rem 3.5rem 0.5rem;
         }
 
         .hoja-carta .cuerpo {
-            line-height: 1.9;
+            line-height: 1.75;
             text-align: justify;
-            font-size: 1.02rem;
+            font-size: 1rem;
         }
 
         .hoja-carta .numero-carta {
             text-align: right;
             font-weight: 600;
             color: var(--asada-azul-oscuro);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hoja-carta .fecha-lugar {
+            text-align: right;
             margin-bottom: 1.5rem;
         }
 
+        .hoja-carta .titulo-carta {
+            text-align: center;
+            font-weight: 700;
+            margin: 1.5rem 0;
+            letter-spacing: 0.02em;
+        }
+
         .hoja-carta .firma {
-            margin-top: 4.5rem;
+            margin-top: 1.5rem;
             text-align: center;
         }
 
-        .hoja-carta .firma .linea {
-            border-top: 1px solid #333;
-            width: 280px;
-            margin: 0 auto 0.4rem;
+        .hoja-carta .firma img {
+            width: 220px;
+            height: auto;
+            margin-bottom: 0.25rem;
+        }
+
+        .hoja-carta .pie-firma {
+            padding-bottom: 1.5rem;
+        }
+
+        .hoja-carta .pie-imagen img {
+            display: block;
+            width: 100%;
+            height: auto;
         }
 
         @media print {
@@ -125,73 +140,78 @@
             <div class="hoja-carta shadow-sm">
 
                 <div class="membrete">
-                    <img th:src="@{/img/logo.svg}" alt="Logo ASADA">
-                    <div>
-                        <h4 class="mb-0">ASADA Barrio Corazón de Jesús de Acosta</h4>
-                        <small class="text-muted">Asociación Administradora del Acueducto y Alcantarillado Sanitario</small>
+                    <img th:src="@{/img/carta-header.png}" alt="Encabezado ASADA Barrio Corazón de Jesús">
+                </div>
+
+                <div class="cuerpo-carta">
+
+                    <div class="numero-carta">
+                        N.° <span th:text="${carta.numeroCarta}"></span>
                     </div>
+
+                    <p class="fecha-lugar">
+                        San Ignacio de Acosta, <span th:text="${#temporals.format(carta.fechaEmision, 'dd MMMM yyyy')}"></span>
+                    </p>
+
+                    <p class="titulo-carta">
+                        CONSTANCIA DE DISPONIBILIDAD DE AGUA POTABLE
+                    </p>
+
+                    <div class="cuerpo">
+
+                        <p>A quien interese:</p>
+
+                        <p>
+                            La Asociación Administradora del Acueducto Rural de Barrio Corazón de Jesús
+                            de Resbalón de Acosta, cédula jurídica 3-002-221006, hace constar que, de
+                            acuerdo con la capacidad actual del sistema de acueducto administrado por
+                            esta asociación, existe disponibilidad de agua potable para brindar el
+                            servicio a la propiedad ubicada en:
+                        </p>
+
+                        <p class="ms-4">
+                            <strong>Dirección:</strong> <span th:text="${carta.direccionPropiedad}"></span><br>
+                            <span th:if="${carta.numeroFinca != null and !carta.numeroFinca.isEmpty()}">
+                                <strong>Número de finca:</strong> <span th:text="${carta.numeroFinca}"></span><br>
+                            </span>
+                            <span th:if="${carta.planoCatastrado != null and !carta.planoCatastrado.isEmpty()}">
+                                <strong>Número de plano/N.° de presentación:</strong> <span th:text="${carta.planoCatastrado}"></span><br>
+                            </span>
+                        </p>
+
+                        <p>
+                            Trámite solicitado por
+                            <strong th:text="${carta.nombreSolicitante}"></strong>,
+                            portador(a) de la cédula
+                            <strong th:text="${carta.cedulaSolicitante}"></strong>.
+                        </p>
+
+                        <p th:if="${carta.observaciones != null and !carta.observaciones.isEmpty()}">
+                            <strong>Observaciones:</strong> <span th:text="${carta.observaciones}"></span>
+                        </p>
+
+                        <p>
+                            Se extiende la presente constancia a solicitud de la parte interesado(a),
+                            para los fines que estime convenientes, sin perjuicio de que la conexión
+                            definitiva del servicio quede sujeta al cumplimiento de los requisitos
+                            técnicos y administrativos vigentes de esta ASADA.
+                        </p>
+
+                        <p>Sin más por el momento se despide</p>
+
+                    </div>
+
+                    <div class="firma pie-firma">
+                        <img th:src="@{/img/sello-firma.png}" alt="Sello y firma ASADA">
+                        <p class="mb-0">Asociación Administradora del Acueducto Rural</p>
+                        <p class="mb-0">de Barrio Corazón de Jesús de Resbalón de Acosta</p>
+                        <p class="mb-0">3-002-221006</p>
+                    </div>
+
                 </div>
 
-                <div class="numero-carta">
-                    N.° <span th:text="${carta.numeroCarta}"></span>
-                </div>
-
-                <p class="text-end">
-                    Barrio Corazón de Jesús de Acosta, <span th:text="${#temporals.format(carta.fechaEmision, 'dd MMMM yyyy')}"></span>
-                </p>
-
-                <h5 class="text-center fw-bold my-4">
-                    CONSTANCIA DE DISPONIBILIDAD DE AGUA POTABLE
-                </h5>
-
-                <div class="cuerpo">
-
-                    <p>A quien interese:</p>
-
-                    <p>
-                        La Asociación Administradora del Acueducto y Alcantarillado Sanitario (ASADA)
-                        del Barrio Corazón de Jesús de Acosta hace constar que, de acuerdo con la
-                        capacidad actual del sistema de acueducto administrado por esta asociación,
-                        existe disponibilidad de agua potable para brindar el servicio a la propiedad
-                        ubicada en:
-                    </p>
-
-                    <p class="ms-4">
-                        <strong>Dirección:</strong> <span th:text="${carta.direccionPropiedad}"></span><br>
-                        <span th:if="${carta.numeroFinca != null and !carta.numeroFinca.isEmpty()}">
-                            <strong>Número de finca:</strong> <span th:text="${carta.numeroFinca}"></span><br>
-                        </span>
-                        <span th:if="${carta.planoCatastrado != null and !carta.planoCatastrado.isEmpty()}">
-                            <strong>Plano catastrado:</strong> <span th:text="${carta.planoCatastrado}"></span><br>
-                        </span>
-                    </p>
-
-                    <p>
-                        Trámite solicitado por
-                        <strong th:text="${carta.nombreSolicitante}"></strong>,
-                        portador(a) de la cédula
-                        <strong th:text="${carta.cedulaSolicitante}"></strong>.
-                    </p>
-
-                    <p th:if="${carta.observaciones != null and !carta.observaciones.isEmpty()}">
-                        <strong>Observaciones:</strong> <span th:text="${carta.observaciones}"></span>
-                    </p>
-
-                    <p>
-                        Se extiende la presente constancia a solicitud de la parte interesada, para
-                        los fines que estime convenientes, sin perjuicio de que la conexión definitiva
-                        del servicio quede sujeta al cumplimiento de los requisitos técnicos y
-                        administrativos vigentes de esta ASADA.
-                    </p>
-
-                </div>
-
-                <div class="firma">
-                    <div class="linea"></div>
-                    <p class="mb-0">
-                        <span th:text="${carta.usuario.nombre + ' ' + carta.usuario.apellidos}"></span>
-                    </p>
-                    <small class="text-muted">Junta Directiva / ASADA Barrio Corazón de Jesús de Acosta</small>
+                <div class="pie-imagen">
+                    <img th:src="@{/img/carta-footer.png}" alt="Pie de página ASADA Barrio Corazón de Jesús">
                 </div>
 
             </div>

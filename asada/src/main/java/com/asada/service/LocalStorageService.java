@@ -70,6 +70,33 @@ public class LocalStorageService implements ImageStorageService {
         return "/uploads/" + folder + "/" + fileName;
     }
 
+    /**
+     * Guarda un archivo de cualquier tipo bajo un nombre único (evita
+     * choques cuando varios archivos se suben para el mismo registro).
+     */
+    @Override
+    public String uploadFile(MultipartFile file, String folder) throws IOException {
+        if (file == null || file.isEmpty()) {
+            return null;
+        }
+
+        String extension = "";
+        String originalName = file.getOriginalFilename();
+        if (originalName != null && originalName.contains(".")) {
+            extension = originalName.substring(originalName.lastIndexOf('.'));
+        }
+
+        String fileName = java.util.UUID.randomUUID().toString().substring(0, 8) + extension;
+
+        Path folderPath = uploadRoot.resolve(folder);
+        Files.createDirectories(folderPath);
+
+        Path target = folderPath.resolve(fileName);
+        Files.copy(file.getInputStream(), target, StandardCopyOption.REPLACE_EXISTING);
+
+        return "/uploads/" + folder + "/" + fileName;
+    }
+
     public Path getUploadRoot() {
         return uploadRoot;
     }

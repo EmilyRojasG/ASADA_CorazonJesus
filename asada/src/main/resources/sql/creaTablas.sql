@@ -198,3 +198,20 @@ CREATE TABLE carta_disponibilidad (
   PRIMARY KEY (id_carta),
   FOREIGN KEY fk_carta_usuario (id_usuario) REFERENCES usuario(id_usuario)
 ) ENGINE = InnoDB;
+
+-- Archivos adjuntos de una carta de disponibilidad (cualquier tipo de
+-- archivo: PDF, Word, imágenes escaneadas, etc.), no solo el documento
+-- generado por el sistema.
+CREATE TABLE carta_archivo (
+  id_archivo INT NOT NULL AUTO_INCREMENT,
+  id_carta INT NOT NULL,
+  id_usuario INT NOT NULL,
+  nombre_original VARCHAR(255) NOT NULL,
+  ruta_archivo VARCHAR(1024) NOT NULL,
+  tipo_contenido VARCHAR(120) NULL,
+  fecha_subida TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (id_archivo),
+  INDEX ndx_archivo_carta (id_carta),
+  FOREIGN KEY fk_cartaarchivo_carta (id_carta) REFERENCES carta_disponibilidad(id_carta),
+  FOREIGN KEY fk_cartaarchivo_usuario (id_usuario) REFERENCES usuario(id_usuario)
+) ENGINE = InnoDB;

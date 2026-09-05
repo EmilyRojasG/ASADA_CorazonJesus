@@ -94,6 +94,7 @@ INSERT INTO ruta (ruta, id_rol) VALUES
 -- Cartas de disponibilidad de agua
 ('/carta_disponibilidad/nueva', 2),
 ('/carta_disponibilidad/guardar', 2),
+('/carta_disponibilidad/*/archivos/subir', 2),
 ('/carta_disponibilidad/listado', 1),
 ('/carta_disponibilidad/ver/**', 1);
 -- Nota: "/reportes/**" no requiere un permiso específico (ver más abajo,

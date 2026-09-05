@@ -25,4 +25,17 @@ public interface ImageStorageService {
      */
     String uploadImage(MultipartFile file, String folder, Integer id) throws IOException;
 
+    /**
+     * Guarda un archivo de cualquier tipo (PDF, Word, Excel, imágenes,
+     * etc.) bajo un nombre único generado automáticamente, y devuelve la
+     * URL pública con la que se puede ver/descargar. A diferencia de
+     * {@link #uploadImage}, aquí puede haber varios archivos para un
+     * mismo registro (por ejemplo, varios adjuntos de una misma carta de
+     * disponibilidad), así que el nombre no depende del id del dueño.
+     *
+     * @param file archivo recibido del formulario (input type="file").
+     * @param folder subcarpeta lógica ("carta_disponibilidad/12", etc.).
+     */
+    String uploadFile(MultipartFile file, String folder) throws IOException;
+
 }
