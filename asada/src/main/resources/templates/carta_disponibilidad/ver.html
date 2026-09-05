@@ -28,6 +28,11 @@
     <link rel="icon" type="image/svg+xml" th:href="@{/img/logo.svg}">
 
     <style>
+        @page {
+            size: letter;
+            margin: 10mm;
+        }
+
         .hoja-carta {
             background: #ffffff;
             max-width: 850px;
@@ -43,13 +48,17 @@
         }
 
         .hoja-carta .cuerpo-carta {
-            padding: 1rem 3.5rem 0.5rem;
+            padding: 0.75rem 3rem 0;
         }
 
         .hoja-carta .cuerpo {
-            line-height: 1.75;
+            line-height: 1.5;
             text-align: justify;
-            font-size: 1rem;
+            font-size: 0.98rem;
+        }
+
+        .hoja-carta .cuerpo p {
+            margin-bottom: 0.65rem;
         }
 
         .hoja-carta .numero-carta {
@@ -57,34 +66,39 @@
             font-weight: 600;
             color: var(--asada-azul-oscuro);
             font-size: 0.9rem;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
         }
 
         .hoja-carta .fecha-lugar {
             text-align: right;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .hoja-carta .titulo-carta {
             text-align: center;
             font-weight: 700;
-            margin: 1.5rem 0;
+            margin: 0.9rem 0;
             letter-spacing: 0.02em;
         }
 
         .hoja-carta .firma {
-            margin-top: 1.5rem;
+            margin-top: 0.75rem;
             text-align: center;
         }
 
         .hoja-carta .firma img {
-            width: 220px;
+            width: 170px;
             height: auto;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.15rem;
+        }
+
+        .hoja-carta .firma p {
+            margin-bottom: 0.15rem;
+            font-size: 0.92rem;
         }
 
         .hoja-carta .pie-firma {
-            padding-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
         }
 
         .hoja-carta .pie-imagen img {
@@ -110,6 +124,10 @@
             }
             .no-imprimir {
                 display: none !important;
+            }
+            .firma,
+            .pie-imagen {
+                page-break-inside: avoid;
             }
         }
     </style>
@@ -150,7 +168,7 @@
                     </div>
 
                     <p class="fecha-lugar">
-                        San Ignacio de Acosta, <span th:text="${#temporals.format(carta.fechaEmision, 'dd MMMM yyyy')}"></span>
+                        San Ignacio de Acosta, <span th:text="${fechaEmisionTexto}"></span>
                     </p>
 
                     <p class="titulo-carta">

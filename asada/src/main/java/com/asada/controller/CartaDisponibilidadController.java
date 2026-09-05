@@ -5,6 +5,8 @@ import com.asada.repository.UsuarioRepository;
 import com.asada.service.ArchivoCartaService;
 import com.asada.service.CartaDisponibilidadService;
 import java.security.Principal;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +20,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/carta_disponibilidad")
 public class CartaDisponibilidadController {
+
+    // Se fuerza el idioma español para la fecha, sin importar el idioma
+    // del navegador o del servidor (Locale.forLanguageTag para no
+    // depender de una constante "new Locale(...)" deprecada).
+    private static final DateTimeFormatter FORMATO_FECHA_ES =
+            DateTimeFormatter.ofPattern("dd 'de' MMMM 'de' yyyy", Locale.forLanguageTag("es-CR"));
 
     private final CartaDisponibilidadService cartaDisponibilidadService;
     private final ArchivoCartaService archivoCartaService;
@@ -83,6 +91,7 @@ public class CartaDisponibilidadController {
             return "redirect:/carta_disponibilidad/listado";
         }
         model.addAttribute("carta", cartaOpt.get());
+        model.addAttribute("fechaEmisionTexto", cartaOpt.get().getFechaEmision().format(FORMATO_FECHA_ES));
         return "carta_disponibilidad/ver";
     }
 
